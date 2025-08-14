@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:glamour_app/screens/auth/login_screen.dart';
+import 'package:glamour_app/core/constants/app_colors.dart';
+import 'package:glamour_app/features/auth/presentation/pages/create_password_page.dart';
+import 'package:glamour_app/features/auth/presentation/pages/forgot_password_page.dart';
+import 'package:glamour_app/features/auth/presentation/pages/login_page.dart';
+import 'package:glamour_app/features/auth/presentation/pages/signup_page.dart';
+import 'package:glamour_app/features/auth/presentation/pages/verification_page.dart';
 import 'package:glamour_app/screens/welcome_screen.dart';
+import 'package:glamour_app/screens/onboarding_screen.dart';
 import 'package:glamour_app/services/auth_service.dart';
 
 void main() async {
@@ -19,7 +25,7 @@ class GlamourApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.grey,
-        scaffoldBackgroundColor: Colors.black,
+        scaffoldBackgroundColor: AppColors.background,
         textTheme: const TextTheme(
           displayLarge: TextStyle(
             color: Colors.white,
@@ -59,7 +65,20 @@ class GlamourApp extends StatelessWidget {
           hintStyle: const TextStyle(color: Colors.grey),
         ),
       ),
-      home: const WelcomeScreen(),
+      initialRoute: '/welcome',
+      routes: {
+        '/welcome': (context) => const WelcomeScreen(),
+        '/onboarding': (context) => const OnboardingScreen(),
+        '/login': (context) => const LoginPage(),
+        '/signup': (context) => const SignupPage(),
+        '/forgot-password': (context) => const ForgotPasswordPage(),
+        '/verification': (context) => VerificationPage(
+          email: ModalRoute.of(context)!.settings.arguments as String,
+        ),
+        '/create-password': (context) => CreatePasswordPage(
+          email: ModalRoute.of(context)!.settings.arguments as String,
+        ),
+      },
     );
   }
 }

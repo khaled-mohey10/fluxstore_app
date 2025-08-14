@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:glamour_app/screens/auth/login_screen.dart';
-import 'package:glamour_app/screens/auth/signup_screen.dart';
+import 'package:glamour_app/features/auth/presentation/pages/login_page.dart';
+import 'package:glamour_app/features/auth/presentation/pages/signup_page.dart';
+
 import 'package:glamour_app/services/auth_service.dart';
 
 class OnboardingScreen extends StatefulWidget {
@@ -52,7 +53,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   void _skipOnboarding() {
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => const LoginScreen()),
+      MaterialPageRoute(builder: (context) => const LoginPage()),
     );
   }
 
@@ -61,7 +62,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     if (mounted) {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const SignupScreen()),
+        MaterialPageRoute(builder: (context) => const SignupPage()),
       );
     }
   }
