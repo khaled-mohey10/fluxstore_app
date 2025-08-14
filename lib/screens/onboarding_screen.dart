@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:glamour_app/screens/auth/login_screen.dart';
 import 'package:glamour_app/screens/auth/signup_screen.dart';
 import 'package:glamour_app/services/auth_service.dart';
 
@@ -24,6 +25,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       'description': 'Favorite brands and hottest trends',
       'image': 'assets/images/intro2.png',
     },
+    {
+      'title': 'Explore Your True Style',
+      'description': 'Relax and let us bring the style to you',
+      'image': 'assets/images/intro3.png',
+    },
   ];
 
   void _onPageChanged(int page) {
@@ -44,7 +50,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   }
 
   void _skipOnboarding() {
-    _completeOnboarding();
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => const LoginScreen()),
+    );
   }
 
   void _completeOnboarding() async {
@@ -63,13 +72,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       body: Stack(
         children: [
           // Background
-          Container(
-            child: Column(
-              children: [
-                Expanded(child: Container(color: Colors.white)),
-                Expanded(child: Container(color: Colors.grey[300])),
-              ],
-            ),
+          Column(
+            children: [
+              Expanded(child: Container(color: Colors.white)),
+              Expanded(child: Container(color: Colors.grey[300])),
+            ],
           ),
           // PageView for images
           PageView.builder(
@@ -77,34 +84,29 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             onPageChanged: _onPageChanged,
             itemCount: introScreens.length,
             itemBuilder: (context, index) {
-              return Center(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Image.asset(introScreens[index]['image']!),
-                      const SizedBox(height: 16),
-                      Text(
-                        introScreens[index]['title']!,
-                        style: const TextStyle(
-                          fontSize: 32,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        ),
-                        textAlign: TextAlign.center,
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      introScreens[index]['title']!,
+                      style: const TextStyle(
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
                       ),
-                      const SizedBox(height: 8),
-                      Text(
-                        introScreens[index]['description']!,
-                        style: const TextStyle(
-                          fontSize: 18,
-                          color: Colors.grey,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
-                  ),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 12),
+                    Text(
+                      introScreens[index]['description']!,
+                      style: const TextStyle(fontSize: 16, color: Colors.grey),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 20),
+                    Image.asset(introScreens[index]['image']!),
+                  ],
                 ),
               );
             },
@@ -122,10 +124,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             ),
           ),
           // Footer
-          Padding(
-            padding: const EdgeInsets.all(24.0),
+          Positioned(
+            bottom: 50,
+            left: 0,
+            right: 0,
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
+              mainAxisSize: MainAxisSize.min,
               children: [
                 // Progress Dots
                 Row(
@@ -133,9 +137,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   children: List.generate(
                     introScreens.length,
                     (index) => Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 4),
-                      width: 8,
-                      height: 8,
+                      margin: const EdgeInsets.symmetric(horizontal: 6),
+                      width: 10,
+                      height: 10,
                       decoration: BoxDecoration(
                         color: index == _currentPage
                             ? Colors.black
@@ -145,17 +149,26 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 24),
-                // Next Button
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: _nextPage,
-                    child: Text(
-                      _currentPage == introScreens.length - 1
-                          ? 'Get Started'
-                          : 'Next',
-                      style: const TextStyle(fontSize: 18),
+                const SizedBox(height: 30),
+                // Shopping Now Button
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 40.0),
+                  child: SizedBox(
+                    width: double.infinity, // جعل الزر يأخذ كامل العرض تقريبًا
+                    height: 55,
+                    child: ElevatedButton(
+                      onPressed: _nextPage,
+                      child: const Text(
+                        'Shopping Now',
+                        style: TextStyle(fontSize: 18),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        side: const BorderSide(color: Colors.black, width: 1),
+                      ),
                     ),
                   ),
                 ),
