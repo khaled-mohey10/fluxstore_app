@@ -5,7 +5,7 @@ import 'package:glamour_app/core/extensions/string_extensions.dart';
 import 'package:glamour_app/core/widgets/app_button.dart';
 import 'package:glamour_app/core/widgets/app_snackbar.dart';
 import 'package:glamour_app/core/widgets/app_text_field.dart';
-import 'package:glamour_app/services/auth_service.dart';
+import 'package:glamour_app/core/services/firebase_auth_service.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -20,6 +20,26 @@ class _LoginPageState extends State<LoginPage> {
   final _passwordController = TextEditingController();
   bool _obscurePassword = true;
   bool _isLoading = false;
+  bool _showRegistrationSuccess = false;
+
+  @override
+  void initState() {
+    super.initState();
+    // Check if we came from registration
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final args = ModalRoute.of(context)?.settings.arguments;
+      if (args != null && args is Map<String, dynamic>) {
+        if (args['fromRegistration'] == true) {
+          setState(() => _showRegistrationSuccess = true);
+          // Show the registration success message
+          AppSnackBar.showSuccess(
+            context,
+            'Registration successful! Please log in.',
+          );
+        }
+      }
+    });
+  }
 
   @override
   void dispose() {
@@ -32,15 +52,20 @@ class _LoginPageState extends State<LoginPage> {
     if (_formKey.currentState!.validate()) {
       setState(() => _isLoading = true);
 
-      final authService = AuthService();
-      await authService.init();
+      final authService = FirebaseAuthService();
 
-      await authService.login(_emailController.text.trim());
+      final user = await authService.signInWithEmailAndPassword(
+        context,
+        _emailController.text.trim(),
+        _passwordController.text,
+      );
 
       if (mounted) {
         setState(() => _isLoading = false);
-        AppSnackBar.showSuccess(context, 'Login successful!');
-        Navigator.pushReplacementNamed(context, '/home');
+        if (user != null) {
+          AppSnackBar.showSuccess(context, 'Login successful!');
+          Navigator.pushReplacementNamed(context, '/home');
+        }
       }
     }
   }

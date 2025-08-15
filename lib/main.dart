@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:glamour_app/core/constants/app_colors.dart';
+import 'package:glamour_app/core/services/firebase_auth_service.dart';
 import 'package:glamour_app/features/auth/presentation/pages/create_password_page.dart';
 import 'package:glamour_app/features/auth/presentation/pages/forgot_password_page.dart';
 import 'package:glamour_app/features/auth/presentation/pages/login_page.dart';
 import 'package:glamour_app/features/auth/presentation/pages/signup_page.dart';
 import 'package:glamour_app/features/auth/presentation/pages/verification_page.dart';
+import 'package:glamour_app/features/home/presentation/pages/home_page.dart';
 import 'package:glamour_app/screens/welcome_screen.dart';
 import 'package:glamour_app/screens/onboarding_screen.dart';
-import 'package:glamour_app/services/auth_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await AuthService().init();
+  await Firebase.initializeApp();
   runApp(const GlamourApp());
 }
 
@@ -65,7 +67,16 @@ class GlamourApp extends StatelessWidget {
           hintStyle: const TextStyle(color: Colors.grey),
         ),
       ),
-      initialRoute: '/welcome',
+      home: StreamBuilder(
+        stream: FirebaseAuthService().authStateChanges,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return const HomePage();
+          } else {
+            return const WelcomeScreen();
+          }
+        },
+      ),
       routes: {
         '/welcome': (context) => const WelcomeScreen(),
         '/onboarding': (context) => const OnboardingScreen(),
@@ -78,6 +89,7 @@ class GlamourApp extends StatelessWidget {
         '/create-password': (context) => CreatePasswordPage(
           email: ModalRoute.of(context)!.settings.arguments as String,
         ),
+        '/home': (context) => const HomePage(),
       },
     );
   }

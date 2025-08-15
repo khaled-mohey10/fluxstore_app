@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "478618879050",
+    "project_id": "glamourapp-3ccbc",
+    "storage_bucket": "glamourapp-3ccbc.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:478618879050:android:a067cf863b867f558d92b3",
+        "android_client_info": {
+          "package_name": "com.example.glamour_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAMcc7vEf15Nfo8wE3O80-v7rvDSX9rtz0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

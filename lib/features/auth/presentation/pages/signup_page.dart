@@ -3,7 +3,8 @@ import 'package:glamour_app/core/extensions/string_extensions.dart';
 import 'package:glamour_app/core/widgets/app_button.dart';
 import 'package:glamour_app/core/widgets/app_snackbar.dart';
 import 'package:glamour_app/core/widgets/app_text_field.dart';
-import 'package:glamour_app/services/auth_service.dart';
+import 'package:glamour_app/core/services/firebase_auth_service.dart';
+import 'package:glamour_app/features/auth/presentation/pages/login_page.dart';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key});
@@ -14,6 +15,7 @@ class SignupPage extends StatefulWidget {
 
 class _SignupPageState extends State<SignupPage> {
   final _formKey = GlobalKey<FormState>();
+  final _nameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
@@ -23,6 +25,7 @@ class _SignupPageState extends State<SignupPage> {
 
   @override
   void dispose() {
+    _nameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
@@ -33,18 +36,33 @@ class _SignupPageState extends State<SignupPage> {
     if (_formKey.currentState!.validate()) {
       setState(() => _isLoading = true);
 
-      final authService = AuthService();
-      await authService.init();
+      final authService = FirebaseAuthService();
 
-      await authService.signUp(
+      final user = await authService.signUpWithEmailAndPassword(
+        context,
         _emailController.text.trim(),
         _passwordController.text,
+        _nameController.text.trim(),
       );
 
+      // Always reset loading state
       if (mounted) {
         setState(() => _isLoading = false);
-        AppSnackBar.showSuccess(context, 'Account created successfully!');
-        Navigator.pushReplacementNamed(context, '/login');
+
+        // Only navigate if user was created successfully
+        if (user != null) {
+          // Use a short delay to ensure UI updates
+          await Future.delayed(const Duration(milliseconds: 100));
+
+          if (mounted) {
+            Navigator.pushNamedAndRemoveUntil(
+              context,
+              '/login',
+              (route) => false,
+              arguments: {'fromRegistration': true},
+            );
+          }
+        }
       }
     }
   }
@@ -76,6 +94,15 @@ class _SignupPageState extends State<SignupPage> {
                   ),
                 ),
                 const SizedBox(height: 48),
+                AppTextField(
+                  controller: _nameController,
+                  labelText: 'Full Name',
+                  hintText: 'Enter your full name',
+                  validator: (value) => value?.validateNotEmpty(
+                    message: 'Please enter your name',
+                  ),
+                ),
+                const SizedBox(height: 16),
                 AppTextField(
                   controller: _emailController,
                   labelText: 'Email',
