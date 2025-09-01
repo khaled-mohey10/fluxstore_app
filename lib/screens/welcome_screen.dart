@@ -17,7 +17,7 @@ class WelcomeScreen extends StatelessWidget {
                 fit: BoxFit.cover,
               ),
             ),
-            child: Container(color: Colors.black.withOpacity(0.6)),
+            child: Container(color: Colors.black.withValues(alpha: 153)),
           ),
 
           // Content

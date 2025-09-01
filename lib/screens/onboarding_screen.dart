@@ -144,7 +144,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       decoration: BoxDecoration(
                         color: index == _currentPage
                             ? Colors.black
-                            : Colors.black.withOpacity(0.3),
+                            : Colors.black.withValues(alpha: 77),
                         shape: BoxShape.circle,
                       ),
                     ),

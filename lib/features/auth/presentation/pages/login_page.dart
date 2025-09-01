@@ -20,7 +20,6 @@ class _LoginPageState extends State<LoginPage> {
   final _passwordController = TextEditingController();
   bool _obscurePassword = true;
   bool _isLoading = false;
-  bool _showRegistrationSuccess = false;
 
   @override
   void initState() {
@@ -30,7 +29,6 @@ class _LoginPageState extends State<LoginPage> {
       final args = ModalRoute.of(context)?.settings.arguments;
       if (args != null && args is Map<String, dynamic>) {
         if (args['fromRegistration'] == true) {
-          setState(() => _showRegistrationSuccess = true);
           // Show the registration success message
           AppSnackBar.showSuccess(
             context,
