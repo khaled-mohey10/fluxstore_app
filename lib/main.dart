@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:glamour_app/core/constants/app_colors.dart';
-import 'package:glamour_app/core/services/firebase_auth_service.dart';
+import 'package:glamour_app/data/services/firebase_auth_service.dart';
 import 'package:glamour_app/features/auth/presentation/pages/create_password_page.dart';
 import 'package:glamour_app/features/auth/presentation/pages/forgot_password_page.dart';
 import 'package:glamour_app/features/auth/presentation/pages/login_page.dart';
@@ -30,27 +30,27 @@ class GlamourApp extends StatelessWidget {
         scaffoldBackgroundColor: AppColors.background,
         textTheme: const TextTheme(
           displayLarge: TextStyle(
-            color: Colors.white,
+            color: Colors.black,
             fontSize: 32,
             fontWeight: FontWeight.bold,
           ),
           displayMedium: TextStyle(
-            color: Colors.white,
+            color: Colors.black,
             fontSize: 28,
             fontWeight: FontWeight.bold,
           ),
           headlineMedium: TextStyle(
-            color: Colors.white,
+            color: Colors.black,
             fontSize: 24,
             fontWeight: FontWeight.w600,
           ),
-          bodyLarge: TextStyle(color: Colors.white, fontSize: 16),
+          bodyLarge: TextStyle(color: Colors.black, fontSize: 16),
           bodyMedium: TextStyle(color: Colors.grey, fontSize: 14),
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.white,
-            foregroundColor: Colors.black,
+            backgroundColor: Colors.black,
+            foregroundColor: Colors.white,
             minimumSize: const Size(double.infinity, 56),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8),
@@ -59,7 +59,7 @@ class GlamourApp extends StatelessWidget {
         ),
         inputDecorationTheme: InputDecorationTheme(
           filled: true,
-          fillColor: Colors.grey[900],
+          fillColor: Colors.white,
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
             borderSide: BorderSide.none,

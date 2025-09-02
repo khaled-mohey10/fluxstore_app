@@ -3,7 +3,7 @@ import 'package:glamour_app/core/extensions/string_extensions.dart';
 import 'package:glamour_app/core/widgets/app_button.dart';
 import 'package:glamour_app/core/widgets/app_snackbar.dart';
 import 'package:glamour_app/core/widgets/app_text_field.dart';
-import 'package:glamour_app/core/services/firebase_auth_service.dart';
+import 'package:glamour_app/data/services/firebase_auth_service.dart';
 import 'package:glamour_app/features/auth/presentation/pages/login_page.dart';
 
 class SignupPage extends StatefulWidget {
