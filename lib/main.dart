@@ -8,6 +8,7 @@ import 'package:glamour_app/features/auth/presentation/pages/login_page.dart';
 import 'package:glamour_app/features/auth/presentation/pages/signup_page.dart';
 import 'package:glamour_app/features/auth/presentation/pages/verification_page.dart';
 import 'package:glamour_app/features/home/presentation/pages/home_page.dart';
+import 'package:glamour_app/features/search/presentation/pages/search_screen.dart';
 import 'package:glamour_app/screens/welcome_screen.dart';
 import 'package:glamour_app/screens/onboarding_screen.dart';
 
@@ -90,6 +91,7 @@ class GlamourApp extends StatelessWidget {
           email: ModalRoute.of(context)!.settings.arguments as String,
         ),
         '/home': (context) => const HomePage(),
+        '/search': (context) => const SearchScreen(),
       },
     );
   }

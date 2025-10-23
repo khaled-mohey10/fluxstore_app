@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:glamour_app/features/home/presentation/widgets/filter_bottom_sheet.dart';
+import 'package:glamour_app/features/search/presentation/pages/search_results_screen.dart';
+import 'package:glamour_app/features/search/presentation/pages/search_screen.dart';
 
 class DiscoverScreen extends StatefulWidget {
   const DiscoverScreen({super.key});
@@ -16,7 +18,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
       'title': 'CLOTHING',
       'image': 'assets/images/banar_1.png',
       'subCategories': [
-        {'name': 'Jacket', 'itemCount': '12 items'},
+        {'name': 'Jacket', 'itemCount': '127 items'},
         {'name': 'Shirts', 'itemCount': '27 items'},
         {'name': 'Dresses', 'itemCount': '45 items'},
         {'name': 'Trousers', 'itemCount': '16 items'},
@@ -78,10 +80,18 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
       body: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            child: Row(
-              children: [
-                Expanded(
+  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+  child: Row(
+    children: [
+            Expanded(
+              child: GestureDetector( 
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const SearchScreen()),
+                  );
+                },
+                child: AbsorbPointer( 
                   child: TextField(
                     decoration: InputDecoration(
                       hintText: "Search",
@@ -98,106 +108,89 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                     ),
                   ),
                 ),
-                const SizedBox(width: 14),
-                Container(
-                  height: 52,
-                  width: 52,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(14),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.08),
-                        blurRadius: 6,
-                        offset: const Offset(0, 3),
-                      ),
-                    ],
-                  ),
-                  child: IconButton(
-                    icon: const Icon(Icons.tune, color: Colors.grey),
-                    onPressed: () {
-                      showModalBottomSheet(
-                        context: context,
-                        isScrollControlled: true, 
-                        backgroundColor: Colors.transparent, // مهم جداً
-                        builder: (context) => const FilterBottomSheet(),
-                      );
-                    },
-                  ),
-                ),
-              ],
+              ),
             ),
-          ),
+          ],
+        ),
+      ),
           const SizedBox(height: 10),
-          Expanded(
-            child: ListView.builder(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              itemCount: _categories.length,
-              itemBuilder: (context, index) {
-                final category = _categories[index];
-                final isExpanded = _expandedIndex == index;
+Expanded(
+  child: ListView.builder(
+    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+    itemCount: _categories.length,
+    itemBuilder: (context, index) {
+      final category = _categories[index];
+      final isExpanded = _expandedIndex == index;
 
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 12.0),
-                  child: GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        if (isExpanded) {
-                          _expandedIndex = null;
-                        } else {
-                          _expandedIndex = index;
-                        }
-                      });
-                    },
-                    child: Column(
-                      children: [
-                        CategoryBanner(
-                          imageUrl: category['image'],
-                        ),
-                        if (isExpanded)
-                          Container(
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                border: Border.all(color: Colors.grey.shade300),
-                                borderRadius: const BorderRadius.only(
-                                  bottomLeft: Radius.circular(16),
-                                  bottomRight: Radius.circular(16),
-                                )),
-                            child: Column(
+      return Padding(
+        padding: const EdgeInsets.only(bottom: 12.0),
+        child: Column(  
+          children: [
+            GestureDetector( 
+               onTap: () {
+                 setState(() {
+                   if (isExpanded) {
+                     _expandedIndex = null;
+                   } else {
+                     _expandedIndex = index;
+                   }
+                 });
+               },
+              child: CategoryBanner(
+                imageUrl: category['image'],
+              ),
+            ),
+            if (isExpanded)
+              Container(
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: Border.all(color: Colors.grey.shade300),
+                    borderRadius: const BorderRadius.only(
+                      bottomLeft: Radius.circular(16),
+                      bottomRight: Radius.circular(16),
+                    )),
+                child: Column(
+                  children: [
+                    for (var subCategory in category['subCategories'])
+                      Column(
+                        children: [
+                          ListTile(
+                            title: Text(subCategory['name']),
+                            trailing: Row(
+                              mainAxisSize: MainAxisSize.min,
                               children: [
-                                for (var subCategory in category['subCategories'])
-                                  Column(
-                                    children: [
-                                      ListTile(
-                                        title: Text(subCategory['name']),
-                                        trailing: Row(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            Text(
-                                              subCategory['itemCount'],
-                                              style:
-                                                  const TextStyle(color: Colors.grey),
-                                            ),
-                                            const SizedBox(width: 8),
-                                            const Icon(Icons.arrow_forward_ios,
-                                                size: 16, color: Colors.grey),
-                                          ],
-                                        ),
-                                        onTap: () {},
-                                      ),
-                                      const Divider(height: 1, indent: 16),
-                                    ],
-                                  ),
+                                Text(
+                                  subCategory['itemCount'],
+                                  style:
+                                      const TextStyle(color: Colors.grey),
+                                ),
+                                const SizedBox(width: 8),
+                                const Icon(Icons.arrow_forward_ios,
+                                    size: 16, color: Colors.grey),
                               ],
                             ),
-                          )
-                      ],
-                    ),
-                  ),
-                );
-              },
-            ),
-          ),
+                            onTap: () {
+                               Navigator.push(
+                                 context,
+                                 MaterialPageRoute(
+                                   builder: (context) => SearchResultsScreen(categoryTitle: subCategory['name']),
+                                 ),
+                               );
+                            },
+                          ),
+                          if (subCategory != category['subCategories'].last) 
+                           const Divider(height: 1, indent: 16, endIndent: 16), 
+                        ],
+                      ),
+                  ],
+                ),
+              )
+          ],
+        ),
+      );
+    },
+  ),
+),
         ],
       ),
     );
