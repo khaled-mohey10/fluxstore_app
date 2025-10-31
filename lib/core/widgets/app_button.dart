@@ -29,32 +29,46 @@ class AppButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final Color defaultTextColor = isOutlined 
+        ? (backgroundColor ?? AppColors.primary) 
+        : (textColor ?? AppColors.onPrimary);
+        
+    final Color defaultBackgroundColor = isOutlined 
+        ? Colors.transparent 
+        : (backgroundColor ?? AppColors.primary);
+        
+    final BorderSide borderSide = isOutlined
+        ? BorderSide(color: backgroundColor ?? AppColors.primary, width: 1.5)
+        : BorderSide.none;
+
     return ElevatedButton(
       onPressed: isLoading ? null : onPressed,
       style: ElevatedButton.styleFrom(
-        backgroundColor: backgroundColor ?? AppColors.primary,
-        foregroundColor: textColor ?? AppColors.onPrimary,
+        backgroundColor: defaultBackgroundColor,
+        foregroundColor: textColor ?? defaultTextColor, 
         minimumSize: Size(width ?? double.infinity, height ?? 56),
         padding: padding ?? const EdgeInsets.symmetric(horizontal: 24),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(borderRadius),
+          side: borderSide,
         ),
+        elevation: 0, 
       ),
       child: isLoading
-          ? const SizedBox(
+          ? SizedBox(
               width: 24,
               height: 24,
               child: CircularProgressIndicator(
                 strokeWidth: 2,
-                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                valueColor: AlwaysStoppedAnimation<Color>(defaultTextColor),
               ),
             )
           : Text(
               text,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
-                color: Colors.black,
+                color: defaultTextColor, 
               ),
             ),
     );

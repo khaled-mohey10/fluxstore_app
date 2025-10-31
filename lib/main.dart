@@ -7,7 +7,9 @@ import 'package:glamour_app/features/auth/presentation/pages/forgot_password_pag
 import 'package:glamour_app/features/auth/presentation/pages/login_page.dart';
 import 'package:glamour_app/features/auth/presentation/pages/signup_page.dart';
 import 'package:glamour_app/features/auth/presentation/pages/verification_page.dart';
+import 'package:glamour_app/features/checkout/presentation/pages/checkout_page.dart';
 import 'package:glamour_app/features/home/presentation/pages/home_page.dart';
+import 'package:glamour_app/features/product/presentation/pages/product_detail_page.dart';
 import 'package:glamour_app/features/search/presentation/pages/search_screen.dart';
 import 'package:glamour_app/screens/welcome_screen.dart';
 import 'package:glamour_app/screens/onboarding_screen.dart';
@@ -92,6 +94,10 @@ class GlamourApp extends StatelessWidget {
         ),
         '/home': (context) => const HomePage(),
         '/search': (context) => const SearchScreen(),
+        // --- 🔽 الإضافات الجديدة 🔽 ---
+        '/product-detail': (context) => const ProductDetailPage(),
+        '/checkout': (context) => const CheckoutPage(),
+        // --- 🔼 الإضافات الجديدة 🔼 ---
       },
     );
   }

@@ -14,6 +14,7 @@ class AppTextField extends StatelessWidget {
   final int? minLines;
   final bool enabled;
   final TextStyle? style;
+  final String? initialValue;
 
   const AppTextField({
     super.key,
@@ -30,12 +31,18 @@ class AppTextField extends StatelessWidget {
     this.minLines,
     this.enabled = true,
     this.style,
-  });
+    this.initialValue, 
+  }) : assert( 
+          controller == null || initialValue == null,
+          'لا يمكن استخدام controller و initialValue في نفس الوقت. '
+          'استخدم: controller: TextEditingController(text: initialValue)',
+        );
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       controller: controller,
+      initialValue: initialValue, 
       obscureText: obscureText,
       keyboardType: keyboardType,
       validator: validator,
@@ -46,8 +53,8 @@ class AppTextField extends StatelessWidget {
       style: style ?? const TextStyle(color: Colors.black, fontSize: 16),
       decoration: InputDecoration(
         hintText: hintText,
-        labelText: labelText,
         prefixIcon: prefixIcon,
+        labelText: labelText,
         suffixIcon: suffixIcon,
         filled: true,
         fillColor: Colors.grey[100],
