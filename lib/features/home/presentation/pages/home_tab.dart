@@ -55,8 +55,12 @@ class HomeTab extends StatelessWidget {
             ProductCardList(
               title: 'Feature Products',
               actionText: 'Show all',
-              products: _getFeatureProducts(),
+              products: _getFeatureProducts(), // <-- البيانات هنا مُحدثة
               isHorizontal: true,
+              onItemTap: (product) {
+                // الربط الذي أضفناه سابقًا
+                Navigator.pushNamed(context, '/product-detail');
+              },
             ),
 
             // New Collection Section
@@ -66,8 +70,12 @@ class HomeTab extends StatelessWidget {
             ProductCardList(
               title: 'Recommended',
               actionText: 'Show all',
-              products: _getRecommendedProducts(),
+              products: _getRecommendedProducts(), // <-- البيانات هنا مُحدثة
               isHorizontal: true,
+              onItemTap: (product) {
+                // الربط الذي أضفناه سابقًا
+                Navigator.pushNamed(context, '/product-detail');
+              },
             ),
 
             // Top Collection Section
@@ -259,27 +267,39 @@ class HomeTab extends StatelessWidget {
     );
   }
 
+  // --- 🔽 التعديل هنا 🔽 ---
   List<Map<String, String>> _getFeatureProducts() {
     return [
       {
         'name': 'Summer Dress',
         'price': '\$49.99',
         'image': 'assets/images/photo_1.png',
+        'oldPrice': '\$79.99',
+        'rating': '4.5',
+        'reviews': '120',
       },
       {
         'name': 'Casual Shirt',
         'price': '\$29.99',
         'image': 'assets/images/photo_2.png',
+        'oldPrice': '\$49.99',
+        'rating': '4.2',
+        'reviews': '80',
       },
       {
-        'name': 'Denim Jacket',
+        'name': 'Sportwear Set',
         'price': '\$79.99',
         'image': 'assets/images/photo_3.png',
+        'rating': '4.8',
+        'reviews': '230',
       },
       {
-        'name': 'Sneakers',
+        'name': 'Gingham Jacket',
         'price': '\$89.99',
         'image': 'assets/images/welcome_hero.png',
+        'oldPrice': '\$120.00',
+        'rating': '4.9',
+        'reviews': '450',
       },
     ];
   }
@@ -287,22 +307,31 @@ class HomeTab extends StatelessWidget {
   List<Map<String, String>> _getRecommendedProducts() {
     return [
       {
-        'name': 'White fashion hoodie',
+        'name': 'Black Fur Coat',
         'price': '\$29.00',
         'image': 'assets/images/intro1.png',
+        'rating': '4.5',
+        'reviews': '110',
       },
       {
-        'name': 'White fashion hoodie',
+        'name': 'Black Fur Coat',
         'price': '\$29.00',
         'image': 'assets/images/intro2.png',
+        'oldPrice': '\$45.00',
+        'rating': '4.7',
+        'reviews': '90',
       },
       {
-        'name': 'White fashion hoodie',
+        'name': 'Black Fur Coat',
         'price': '\$29.00',
         'image': 'assets/images/intro3.png',
+        'rating': '4.3',
+        'reviews': '130',
       },
     ];
   }
+  // --- 🔼 نهاية التعديل 🔼 ---
+
 
   List<Map<String, String>> _getTopCollectionProducts() {
     return [

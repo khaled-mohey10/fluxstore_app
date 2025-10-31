@@ -63,7 +63,9 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.menu, color: Colors.black),
-          onPressed: () {},
+          onPressed: () {
+            Scaffold.of(context).openDrawer();
+          },
         ),
         title: const Text(
           'Discover',

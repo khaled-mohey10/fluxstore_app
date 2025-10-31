@@ -5,7 +5,14 @@ class ProductCard extends StatelessWidget {
   final String imageUrl;
   final String name;
   final String price;
-  final bool isHorizontal;
+  final bool isHorizontal; // هذا الاسم مربك، لكننا سنلتزم به
+  final VoidCallback? onTap;
+
+  // --- 🔽 الإضافات الجديدة 🔽 ---
+  final String? oldPrice;
+  final double? rating;
+  final int? reviewCount;
+  // --- 🔼 الإضافات الجديدة 🔼 ---
 
   const ProductCard({
     super.key,
@@ -13,68 +20,80 @@ class ProductCard extends StatelessWidget {
     required this.name,
     required this.price,
     this.isHorizontal = true,
+    this.onTap,
+    // --- 🔽 الإضافات الجديدة 🔽 ---
+    this.oldPrice,
+    this.rating,
+    this.reviewCount,
+    // --- 🔼 الإضافات الجديدة 🔼 ---
   });
 
+  // البطاقة ذات الخلفية الداكنة (القديمة)
   Widget _buildVerticalCard() {
-    return Container(
-      width: 160,
-      margin: const EdgeInsets.only(right: 16),
-      decoration: BoxDecoration(
-        color: Colors.grey[900],
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          // Product Image
-          Container(
-            height: 180,
-            decoration: BoxDecoration(
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(12),
-                topRight: Radius.circular(12),
-              ),
-              image: DecorationImage(
-                image: AssetImage(imageUrl),
-                fit: BoxFit.cover,
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: 160,
+        margin: const EdgeInsets.only(right: 16),
+        decoration: BoxDecoration(
+          color: Colors.grey[900],
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              height: 180,
+              decoration: BoxDecoration(
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(12),
+                  topRight: Radius.circular(12),
+                ),
+                image: DecorationImage(
+                  image: AssetImage(imageUrl),
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(12),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  name,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
+            Padding(
+              padding: const EdgeInsets.all(12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    name,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                    ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                   ),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  price,
-                  style: TextStyle(
-                    color: AppColors.primary,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
+                  const SizedBox(height: 8),
+                  Text(
+                    price,
+                    style: TextStyle(
+                      color: AppColors.primary,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                ),
-              ],
+                  // يمكن إضافة السعر القديم والتقييم هنا أيضًا إذا أردت
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    // isHorizontal: true = البطاقة البيضاء (لصفحة البحث والصفحة الرئيسية)
+    // isHorizontal: false = البطاقة الداكنة (غير مستخدمة حاليًا في البحث)
     if (isHorizontal) {
       return _buildHorizontalCard();
     } else {
@@ -82,70 +101,122 @@ class ProductCard extends StatelessWidget {
     }
   }
 
+  // البطاقة ذات الخلفية البيضاء (الجديدة المطابقة لـ found results.pdf)
   Widget _buildHorizontalCard() {
-    return Container(
-      width: 140,
-      margin: const EdgeInsets.only(right: 16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 6,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Product Image
-          Container(
-            height: 180,
-            decoration: BoxDecoration(
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        // العرض يتم تحديده بواسطة الـ GridView
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.05),
+              blurRadius: 6,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // صورة المنتج
+            ClipRRect(
               borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(12),
                 topRight: Radius.circular(12),
               ),
-              image: DecorationImage(
-                image: AssetImage(imageUrl),
+              child: Image.asset(
+                imageUrl,
                 fit: BoxFit.cover,
+                // تحديد ارتفاع نسبي للصورة لجعل البطاقات متجاوبة
+                height: 180, 
+                width: double.infinity,
               ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(12),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  name,
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
+            
+            // التفاصيل
+            Padding(
+              padding: const EdgeInsets.all(12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    name,
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                    ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                   ),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const SizedBox(height: 6),
-                Text(
-                  price,
-                  style: TextStyle(
-                    color: AppColors.primary,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
+                  const SizedBox(height: 6),
+                  
+                  // --- 🔽 التعديل هنا (إضافة الأسعار) 🔽 ---
+                  Row(
+                    children: [
+                      Text(
+                        price,
+                        style: TextStyle(
+                          color: AppColors.primary,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      if (oldPrice != null) ...[
+                        const SizedBox(width: 8),
+                        Text(
+                          oldPrice!,
+                          style: TextStyle(
+                            color: Colors.grey[500],
+                            fontSize: 14,
+                            decoration: TextDecoration.lineThrough,
+                          ),
+                        ),
+                      ],
+                    ],
                   ),
-                ),
-              ],
+                  // --- 🔼 التعديل هنا 🔼 ---
+
+                  // --- 🔽 التعديل هنا (إضافة التقييم) 🔽 ---
+                  if (rating != null && reviewCount != null) ...[
+                    const SizedBox(height: 6),
+                    Row(
+                      children: [
+                        ...List.generate(
+                          5,
+                          (index) => Icon(
+                            Icons.star,
+                            size: 16,
+                            color: index < rating! ? Colors.amber : Colors.grey[300],
+                          ),
+                        ),
+                        const SizedBox(width: 4),
+                        Text(
+                          '($reviewCount)',
+                          style: const TextStyle(
+                            color: Colors.grey,
+                            fontSize: 12,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                  // --- 🔼 التعديل هنا 🔼 ---
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 }
+
+// ... (ProductCardList سيبقى كما هو من المرة السابقة) ...
+// (الكود الذي أضفناه في الخطوة 6 سيعمل مباشرة مع هذا التعديل)
 
 class ProductCardList extends StatelessWidget {
   final String title;
@@ -153,6 +224,7 @@ class ProductCardList extends StatelessWidget {
   final List<Map<String, String>> products;
   final bool isHorizontal;
   final VoidCallback? onActionTap;
+  final Function(Map<String, String> product)? onItemTap;
 
   const ProductCardList({
     super.key,
@@ -161,6 +233,7 @@ class ProductCardList extends StatelessWidget {
     required this.products,
     this.isHorizontal = true,
     this.onActionTap,
+    this.onItemTap,
   });
 
   @override
@@ -193,7 +266,7 @@ class ProductCardList extends StatelessWidget {
         ),
         if (isHorizontal)
           SizedBox(
-            height: 300,
+            height: 300, // الارتفاع هنا مضبوط للبطاقة الجديدة
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
               padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -204,7 +277,15 @@ class ProductCardList extends StatelessWidget {
                   imageUrl: product['image'] ?? '',
                   name: product['name'] ?? '',
                   price: product['price'] ?? '',
+                  oldPrice: product['oldPrice'], // تمرير البيانات
+                  rating: double.tryParse(product['rating'] ?? ''), // تمرير البيانات
+                  reviewCount: int.tryParse(product['reviews'] ?? ''), // تمرير البيانات
                   isHorizontal: true,
+                  onTap: () {
+                    if (onItemTap != null) {
+                      onItemTap!(product);
+                    }
+                  },
                 );
               },
             ),
@@ -220,7 +301,7 @@ class ProductCardList extends StatelessWidget {
                 crossAxisCount: 2,
                 mainAxisSpacing: 16,
                 crossAxisSpacing: 16,
-                childAspectRatio: 1.4,
+                childAspectRatio: 0.6, // نسبة العرض للارتفاع للبطاقة في الشبكة
               ),
               itemBuilder: (context, index) {
                 final product = products[index];
@@ -228,7 +309,15 @@ class ProductCardList extends StatelessWidget {
                   imageUrl: product['image'] ?? '',
                   name: product['name'] ?? '',
                   price: product['price'] ?? '',
-                  isHorizontal: false,
+                  oldPrice: product['oldPrice'], // تمرير البيانات
+                  rating: double.tryParse(product['rating'] ?? ''), // تمرير البيانات
+                  reviewCount: int.tryParse(product['reviews'] ?? ''), // تمرير البيانات
+                  isHorizontal: true, // !! استخدام البطاقة البيضاء !!
+                  onTap: () {
+                    if (onItemTap != null) {
+                      onItemTap!(product);
+                    }
+                  },
                 );
               },
             ),
