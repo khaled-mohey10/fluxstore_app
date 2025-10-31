@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:glamour_app/features/checkout/presentation/pages/order_completed_step.dart';
-import 'package:glamour_app/features/checkout/presentation/pages/payment_step.dart';
 import 'package:glamour_app/features/checkout/presentation/pages/shipping_step.dart';
-
+import 'package:glamour_app/features/checkout/presentation/pages/payment_step.dart';
+import 'package:glamour_app/features/checkout/presentation/pages/order_completed_step.dart';
 
 class CheckoutPage extends StatefulWidget {
   const CheckoutPage({super.key});
@@ -33,19 +32,14 @@ class _CheckoutPage extends State<CheckoutPage> {
     return PopScope(
       canPop: canPop,
       child: Scaffold(
-        backgroundColor: Colors.white,
+          
         appBar: AppBar(
-          backgroundColor: Colors.white,
-          elevation: 0,
-          title: const Text(
-            'Check out',
-            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-          ),
+          title: const Text('Check out'),
           centerTitle: true,
           automaticallyImplyLeading: canPop,
           leading: canPop
               ? IconButton(
-                  icon: const Icon(Icons.arrow_back, color: Colors.black),
+                  icon: const Icon(Icons.arrow_back), 
                   onPressed: () {
                     if (_currentStep == 0) {
                       Navigator.pop(context);
@@ -58,12 +52,12 @@ class _CheckoutPage extends State<CheckoutPage> {
         ),
         body: Column(
           children: [
-            if (_currentStep < 2) 
+            if (_currentStep < 2)
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 24.0),
+                padding: const EdgeInsets.symmetric(
+                    vertical: 16.0, horizontal: 24.0),
                 child: _CheckoutStepper(currentStep: _currentStep),
               ),
-            
             Expanded(
               child: PageView(
                 controller: _pageController,
@@ -92,39 +86,41 @@ class _CheckoutStepper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        _buildStepIcon(Icons.location_on, 0),
-        _buildConnector(),
-        _buildStepIcon(Icons.payment, 1),
-        _buildConnector(),
-        _buildStepIcon(Icons.check_circle, 2),
+        _buildStepIcon(Icons.location_on, 0, theme),
+        _buildConnector(theme),
+        _buildStepIcon(Icons.payment, 1, theme),
+        _buildConnector(theme),
+        _buildStepIcon(Icons.check_circle, 2, theme),
       ],
     );
   }
 
-  Widget _buildStepIcon(IconData icon, int stepIndex) {
+  Widget _buildStepIcon(IconData icon, int stepIndex, ThemeData theme) {
     bool isActive = currentStep >= stepIndex;
     return Container(
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
-        color: isActive ? Colors.black : Colors.grey[200],
+         color: isActive ? theme.primaryColor : Colors.grey[200],
         shape: BoxShape.circle,
       ),
       child: Icon(
         icon,
-        color: isActive ? Colors.white : Colors.grey[400],
+         color: isActive ? theme.colorScheme.onPrimary : Colors.grey[400],
         size: 18,
       ),
     );
   }
 
-  Widget _buildConnector() {
+  Widget _buildConnector(ThemeData theme) {
     return Expanded(
       child: Container(
         height: 2,
-        color: Colors.grey[200],
+        color: theme.dividerColor,   
         margin: const EdgeInsets.symmetric(horizontal: 8),
       ),
     );

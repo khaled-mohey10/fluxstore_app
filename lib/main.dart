@@ -2,17 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:glamour_app/core/constants/app_colors.dart';
 import 'package:glamour_app/data/services/firebase_auth_service.dart';
-import 'package:glamour_app/features/auth/presentation/pages/create_password_page.dart';
 import 'package:glamour_app/features/auth/presentation/pages/forgot_password_page.dart';
 import 'package:glamour_app/features/auth/presentation/pages/login_page.dart';
 import 'package:glamour_app/features/auth/presentation/pages/signup_page.dart';
-import 'package:glamour_app/features/auth/presentation/pages/verification_page.dart';
-import 'package:glamour_app/features/checkout/presentation/pages/checkout_page.dart';
 import 'package:glamour_app/features/home/presentation/pages/home_page.dart';
-import 'package:glamour_app/features/product/presentation/pages/product_detail_page.dart';
 import 'package:glamour_app/features/search/presentation/pages/search_screen.dart';
 import 'package:glamour_app/screens/welcome_screen.dart';
 import 'package:glamour_app/screens/onboarding_screen.dart';
+
+import 'package:glamour_app/features/product/presentation/pages/product_detail_page.dart';
+import 'package:glamour_app/features/checkout/presentation/pages/checkout_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -28,35 +27,39 @@ class GlamourApp extends StatelessWidget {
     return MaterialApp(
       title: 'Glamour',
       debugShowCheckedModeBanner: false,
+
       theme: ThemeData(
-        primarySwatch: Colors.grey,
+        primaryColor: AppColors.primary,
         scaffoldBackgroundColor: AppColors.background,
-        textTheme: const TextTheme(
-          displayLarge: TextStyle(
-            color: Colors.black,
-            fontSize: 32,
-            fontWeight: FontWeight.bold,
-          ),
-          displayMedium: TextStyle(
-            color: Colors.black,
-            fontSize: 28,
-            fontWeight: FontWeight.bold,
-          ),
-          headlineMedium: TextStyle(
-            color: Colors.black,
-            fontSize: 24,
+        appBarTheme: AppBarTheme(
+          elevation: 0,
+          backgroundColor: AppColors.background,
+          iconTheme: IconThemeData(color: AppColors.text),
+          titleTextStyle: TextStyle(
+            color: AppColors.text,
+            fontSize: 18,
             fontWeight: FontWeight.w600,
           ),
-          bodyLarge: TextStyle(color: Colors.black, fontSize: 16),
-          bodyMedium: TextStyle(color: Colors.grey, fontSize: 14),
+        ),
+        bottomNavigationBarTheme: BottomNavigationBarThemeData(
+          backgroundColor: Colors.white,
+          selectedItemColor: AppColors.primary,
+          unselectedItemColor: Colors.grey[400],
+          type: BottomNavigationBarType.fixed,
+          elevation: 8,
+          showUnselectedLabels: true,
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.black,
-            foregroundColor: Colors.white,
+            backgroundColor: AppColors.primary,
+            foregroundColor: AppColors.onPrimary,
             minimumSize: const Size(double.infinity, 56),
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(30),
+            ),
+            textStyle: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
             ),
           ),
         ),
@@ -64,15 +67,44 @@ class GlamourApp extends StatelessWidget {
           filled: true,
           fillColor: Colors.white,
           border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8),
-            borderSide: BorderSide.none,
+            borderRadius: BorderRadius.circular(12),
+            borderSide: BorderSide(color: Colors.grey[300]!),
           ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: BorderSide(color: Colors.grey[300]!),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: BorderSide(color: AppColors.primary, width: 2.0),
+          ),
+          labelStyle: TextStyle(color: AppColors.text),
           hintStyle: const TextStyle(color: Colors.grey),
         ),
+        textTheme: TextTheme(
+          headlineLarge: TextStyle(color: AppColors.text, fontSize: 32, fontWeight: FontWeight.bold),
+          headlineMedium: TextStyle(color: AppColors.text, fontSize: 28, fontWeight: FontWeight.bold),
+          headlineSmall: TextStyle(color: AppColors.text, fontSize: 24, fontWeight: FontWeight.bold),
+          titleLarge: TextStyle(color: AppColors.text, fontSize: 20, fontWeight: FontWeight.w600),
+          titleMedium: TextStyle(color: AppColors.text, fontSize: 16, fontWeight: FontWeight.w600),
+          bodyLarge: TextStyle(color: AppColors.text, fontSize: 16),
+          bodyMedium: TextStyle(color: Colors.grey[700], fontSize: 14),
+        ),
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: AppColors.primary,
+          primary: AppColors.primary,
+          background: AppColors.background,
+        ),
       ),
+
       home: StreamBuilder(
         stream: FirebaseAuthService().authStateChanges,
         builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Scaffold(
+              body: Center(child: CircularProgressIndicator()),
+            );
+          }
           if (snapshot.hasData) {
             return const HomePage();
           } else {
@@ -80,24 +112,17 @@ class GlamourApp extends StatelessWidget {
           }
         },
       ),
+
       routes: {
         '/welcome': (context) => const WelcomeScreen(),
         '/onboarding': (context) => const OnboardingScreen(),
         '/login': (context) => const LoginPage(),
         '/signup': (context) => const SignupPage(),
         '/forgot-password': (context) => const ForgotPasswordPage(),
-        '/verification': (context) => VerificationPage(
-          email: ModalRoute.of(context)!.settings.arguments as String,
-        ),
-        '/create-password': (context) => CreatePasswordPage(
-          email: ModalRoute.of(context)!.settings.arguments as String,
-        ),
         '/home': (context) => const HomePage(),
         '/search': (context) => const SearchScreen(),
-        // --- 🔽 الإضافات الجديدة 🔽 ---
         '/product-detail': (context) => const ProductDetailPage(),
         '/checkout': (context) => const CheckoutPage(),
-        // --- 🔼 الإضافات الجديدة 🔼 ---
       },
     );
   }

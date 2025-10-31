@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:glamour_app/core/widgets/app_snackbar.dart';
 
 class FirebaseAuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -12,6 +11,16 @@ class FirebaseAuthService {
 
   // Auth state stream
   Stream<User?> get authStateChanges => _auth.authStateChanges();
+
+  void _showSnackBar(BuildContext context, String message, {bool isError = false}) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: isError ? Colors.red : Colors.green,
+        behavior: SnackBarBehavior.floating,
+      ),
+    );
+  }
 
   // Sign in with email and password
   Future<User?> signInWithEmailAndPassword(
@@ -24,11 +33,6 @@ class FirebaseAuthService {
         email: email,
         password: password,
       );
-
-      if (credential.user != null) {
-        AppSnackBar.showSuccess(context, 'Successfully signed in!');
-      }
-
       return credential.user;
     } on FirebaseAuthException catch (e) {
       _handleAuthError(context, e);
@@ -50,32 +54,26 @@ class FirebaseAuthService {
       );
 
       if (credential.user != null) {
-        // Update display name
         await credential.user!.updateDisplayName(name);
-
-        // Create user document in Firestore
         await _firestore.collection('users').doc(credential.user!.uid).set({
           'name': name,
           'email': email,
           'createdAt': FieldValue.serverTimestamp(),
           'updatedAt': FieldValue.serverTimestamp(),
         });
-
-        // Reload user to get updated display name
         await credential.user!.reload();
-
         return credential.user;
       }
-
       return credential.user;
     } on FirebaseAuthException catch (e) {
       _handleAuthError(context, e);
       return null;
     } catch (e) {
       if (context.mounted) {
-        AppSnackBar.showError(
+        _showSnackBar(
           context,
           'Error creating account: ${e.toString()}',
+          isError: true,
         );
       }
       return null;
@@ -89,7 +87,7 @@ class FirebaseAuthService {
   ) async {
     try {
       await _auth.sendPasswordResetEmail(email: email);
-      AppSnackBar.showSuccess(context, 'Password reset email sent!');
+      _showSnackBar(context, 'Password reset email sent!');
     } on FirebaseAuthException catch (e) {
       _handleAuthError(context, e);
     }
@@ -99,9 +97,9 @@ class FirebaseAuthService {
   Future<void> signOut(BuildContext context) async {
     try {
       await _auth.signOut();
-      AppSnackBar.showSuccess(context, 'Successfully signed out!');
+      _showSnackBar(context, 'Successfully signed out!');
     } catch (e) {
-      AppSnackBar.showError(context, 'Error signing out: ${e.toString()}');
+      _showSnackBar(context, 'Error signing out: ${e.toString()}', isError: true);
     }
   }
 
@@ -136,6 +134,6 @@ class FirebaseAuthService {
       default:
         errorMessage = 'An unknown error occurred. Please try again.';
     }
-    AppSnackBar.showError(context, errorMessage);
+    _showSnackBar(context, errorMessage, isError: true);
   }
 }

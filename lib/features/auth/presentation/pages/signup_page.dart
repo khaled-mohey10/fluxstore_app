@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:glamour_app/core/extensions/string_extensions.dart';
 import 'package:glamour_app/core/widgets/app_button.dart';
-import 'package:glamour_app/core/widgets/app_snackbar.dart';
 import 'package:glamour_app/core/widgets/app_text_field.dart';
 import 'package:glamour_app/data/services/firebase_auth_service.dart';
-import 'package:glamour_app/features/auth/presentation/pages/login_page.dart';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key});
@@ -34,6 +31,16 @@ class _SignupPageState extends State<SignupPage> {
 
   Future<void> _handleSignup() async {
     if (_formKey.currentState!.validate()) {
+      if (_passwordController.text != _confirmPasswordController.text) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Passwords do not match'),
+            backgroundColor: Colors.red,
+          ),
+        );
+        return;
+      }
+
       setState(() => _isLoading = true);
 
       final authService = FirebaseAuthService();
@@ -45,15 +52,10 @@ class _SignupPageState extends State<SignupPage> {
         _nameController.text.trim(),
       );
 
-      // Always reset loading state
       if (mounted) {
         setState(() => _isLoading = false);
-
-        // Only navigate if user was created successfully
         if (user != null) {
-          // Use a short delay to ensure UI updates
           await Future.delayed(const Duration(milliseconds: 100));
-
           if (mounted) {
             Navigator.pushNamedAndRemoveUntil(
               context,
@@ -69,12 +71,11 @@ class _SignupPageState extends State<SignupPage> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text('Create your account'),
-        backgroundColor: Colors.white,
-        elevation: 0,
+        title: const Text('Sign Up'),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -85,22 +86,22 @@ class _SignupPageState extends State<SignupPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: 32),
-                const Text(
-                  'Start your account',
-                  style: TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                  ),
+                Text(
+                  'Create Account',
+                  style: theme.textTheme.headlineMedium,
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  'Start your journey with us.',
+                  style: theme.textTheme.bodyMedium,
                 ),
                 const SizedBox(height: 48),
                 AppTextField(
                   controller: _nameController,
                   labelText: 'Full Name',
                   hintText: 'Enter your full name',
-                  validator: (value) => value?.validateNotEmpty(
-                    message: 'Please enter your name',
-                  ),
+                  validator: (value) =>
+                      (value == null || value.isEmpty) ? 'Please enter your name' : null,
                 ),
                 const SizedBox(height: 16),
                 AppTextField(
@@ -108,7 +109,8 @@ class _SignupPageState extends State<SignupPage> {
                   labelText: 'Email',
                   hintText: 'Enter your email',
                   keyboardType: TextInputType.emailAddress,
-                  validator: (value) => value?.validateEmail(),
+                  validator: (value) =>
+                      (value == null || value.isEmpty) ? 'Please enter your email' : null,
                 ),
                 const SizedBox(height: 16),
                 AppTextField(
@@ -119,8 +121,8 @@ class _SignupPageState extends State<SignupPage> {
                   suffixIcon: IconButton(
                     icon: Icon(
                       _obscurePassword
-                          ? Icons.visibility
-                          : Icons.visibility_off,
+                          ? Icons.visibility_off_outlined
+                          : Icons.visibility_outlined,
                       color: Colors.grey,
                     ),
                     onPressed: () {
@@ -129,7 +131,9 @@ class _SignupPageState extends State<SignupPage> {
                       });
                     },
                   ),
-                  validator: (value) => value?.validatePassword(),
+                  validator: (value) => (value == null || value.length < 6)
+                      ? 'Password must be at least 6 characters'
+                      : null,
                 ),
                 const SizedBox(height: 16),
                 AppTextField(
@@ -140,8 +144,8 @@ class _SignupPageState extends State<SignupPage> {
                   suffixIcon: IconButton(
                     icon: Icon(
                       _obscureConfirmPassword
-                          ? Icons.visibility
-                          : Icons.visibility_off,
+                          ? Icons.visibility_off_outlined
+                          : Icons.visibility_outlined,
                       color: Colors.grey,
                     ),
                     onPressed: () {
@@ -150,10 +154,8 @@ class _SignupPageState extends State<SignupPage> {
                       });
                     },
                   ),
-                  validator: (value) => value?.validateMatch(
-                    _passwordController.text,
-                    message: 'Passwords do not match',
-                  ),
+                  validator: (value) =>
+                      (value != _passwordController.text) ? 'Passwords do not match' : null,
                 ),
                 const SizedBox(height: 32),
                 AppButton(
@@ -165,12 +167,21 @@ class _SignupPageState extends State<SignupPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text('Already have an account?'),
+                    Text(
+                      'Already have an account?',
+                      style: theme.textTheme.bodyMedium,
+                    ),
                     TextButton(
                       onPressed: () {
                         Navigator.pushNamed(context, '/login');
                       },
-                      child: const Text('Log In'),
+                      child: Text(
+                        'Log In',
+                        style: TextStyle(
+                          color: theme.primaryColor,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ),
                   ],
                 ),

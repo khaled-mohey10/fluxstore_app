@@ -10,11 +10,13 @@ class PaymentStep extends StatefulWidget {
 }
 
 class _PaymentStepState extends State<PaymentStep> {
-  int _selectedPaymentMethod = 1;
+  int _selectedPaymentMethod = 1; 
   bool _agreeToTerms = false;
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Column(
       children: [
         Expanded(
@@ -25,11 +27,11 @@ class _PaymentStepState extends State<PaymentStep> {
               children: [
                 Text(
                   'STEP 2',
-                  style: TextStyle(color: Colors.grey[600], fontSize: 12),
+                  style: theme.textTheme.bodySmall?.copyWith(color: Colors.grey[600]),
                 ),
-                const Text(
+                Text(
                   'Payment',
-                  style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+                  style: theme.textTheme.headlineMedium,
                 ),
                 const SizedBox(height: 24),
                 
@@ -40,6 +42,7 @@ class _PaymentStepState extends State<PaymentStep> {
                       label: 'Cash',
                       isSelected: _selectedPaymentMethod == 0,
                       onTap: () => setState(() => _selectedPaymentMethod = 0),
+                      theme: theme,
                     ),
                     const SizedBox(width: 16),
                     _buildPaymentMethodCard(
@@ -47,6 +50,7 @@ class _PaymentStepState extends State<PaymentStep> {
                       label: 'Credit Card',
                       isSelected: _selectedPaymentMethod == 1,
                       onTap: () => setState(() => _selectedPaymentMethod = 1),
+                      theme: theme,
                     ),
                     const SizedBox(width: 16),
                      _buildPaymentMethodCard(
@@ -54,6 +58,7 @@ class _PaymentStepState extends State<PaymentStep> {
                       label: 'More',
                       isSelected: _selectedPaymentMethod == 2,
                       onTap: () => setState(() => _selectedPaymentMethod = 2),
+                      theme: theme,
                     ),
                   ],
                 ),
@@ -62,31 +67,34 @@ class _PaymentStepState extends State<PaymentStep> {
                 _buildCreditCard(),
                 const SizedBox(height: 32),
                 
-                _buildSummaryRow('Product price', '\$110'),
+                _buildSummaryRow('Product price', '\$110', theme),
                 const SizedBox(height: 10),
-                _buildSummaryRow('Shipping', 'Freeship'),
-                const Divider(height: 32, thickness: 1),
-                _buildSummaryRow('Subtotal', '\$110', isBold: true),
+                _buildSummaryRow('Shipping', 'Freeship', theme),
+                Divider(height: 32, thickness: 1, color: theme.dividerColor),
+                _buildSummaryRow('Subtotal', '\$110', theme, isBold: true),
                 const SizedBox(height: 24),
 
                 CheckboxListTile(
                   value: _agreeToTerms,
                   onChanged: (val) => setState(() => _agreeToTerms = val ?? false),
                   title: RichText(
-                    text: const TextSpan(
-                      style: TextStyle(color: Colors.black, fontSize: 14),
+                    text: TextSpan(
+                      style: theme.textTheme.bodyMedium,
                       children: [
-                        TextSpan(text: 'I agree to '),
+                        const TextSpan(text: 'I agree to '),
                         TextSpan(
                           text: 'Terms and conditions',
-                          style: TextStyle(fontWeight: FontWeight.bold, decoration: TextDecoration.underline),
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            fontWeight: FontWeight.bold,
+                            decoration: TextDecoration.underline
+                          ),
                         ),
                       ],
                     ),
                   ),
                   controlAffinity: ListTileControlAffinity.leading,
                   contentPadding: EdgeInsets.zero,
-                  activeColor: Colors.black,
+                  activeColor: theme.primaryColor,
                 ),
               ],
             ),
@@ -100,7 +108,6 @@ class _PaymentStepState extends State<PaymentStep> {
             onPressed: _agreeToTerms ? widget.onPlaceOrder : null,
             backgroundColor: Colors.black,
             textColor: Colors.white,
-            borderRadius: 30,
           ),
         ),
       ],
@@ -112,6 +119,7 @@ class _PaymentStepState extends State<PaymentStep> {
     required String label,
     required bool isSelected,
     required VoidCallback onTap,
+    required ThemeData theme,
   }) {
     return Expanded(
       child: GestureDetector(
@@ -119,17 +127,17 @@ class _PaymentStepState extends State<PaymentStep> {
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 20),
           decoration: BoxDecoration(
-            color: isSelected ? Colors.black : Colors.white,
+                 color: isSelected ? theme.primaryColor : Colors.white,
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
-              color: isSelected ? Colors.black : Colors.grey[300]!,
+              color: isSelected ? theme.primaryColor : theme.dividerColor,
             ),
           ),
           child: Column(
             children: [
-              Icon(icon, color: isSelected ? Colors.white : Colors.black),
+              Icon(icon, color: isSelected ? theme.colorScheme.onPrimary : theme.colorScheme.onBackground),
               const SizedBox(height: 8),
-              Text(label, style: TextStyle(color: isSelected ? Colors.white : Colors.black)),
+              Text(label, style: TextStyle(color: isSelected ? theme.colorScheme.onPrimary : theme.colorScheme.onBackground)),
             ],
           ),
         ),
@@ -190,23 +198,19 @@ class _PaymentStepState extends State<PaymentStep> {
     );
   }
 
-  Widget _buildSummaryRow(String title, String amount, {bool isBold = false}) {
+  Widget _buildSummaryRow(String title, String amount, ThemeData theme, {bool isBold = false}) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
           title,
-          style: TextStyle(
-            fontSize: 15,
-            color: isBold ? Colors.black : Colors.grey.shade600,
-            fontWeight: isBold ? FontWeight.bold : FontWeight.normal,
-          ),
+          style: isBold
+              ? theme.textTheme.titleMedium
+              : theme.textTheme.bodyMedium,
         ),
         Text(
           amount,
-          style: TextStyle(
-            fontSize: 16,
-            color: Colors.black,
+          style: theme.textTheme.titleMedium?.copyWith(
             fontWeight: isBold ? FontWeight.bold : FontWeight.w600,
           ),
         ),

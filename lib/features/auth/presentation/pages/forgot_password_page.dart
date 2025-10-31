@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:glamour_app/core/extensions/string_extensions.dart';
 import 'package:glamour_app/core/widgets/app_button.dart';
-import 'package:glamour_app/core/widgets/app_snackbar.dart';
 import 'package:glamour_app/core/widgets/app_text_field.dart';
-import 'package:glamour_app/services/auth_service.dart';
+import 'package:glamour_app/data/services/firebase_auth_service.dart'; 
 
 class ForgotPasswordPage extends StatefulWidget {
   const ForgotPasswordPage({super.key});
@@ -27,30 +25,28 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     if (_formKey.currentState!.validate()) {
       setState(() => _isLoading = true);
 
-      final authService = AuthService();
-      await authService.init();
-
-      await authService.resetPassword(_emailController.text.trim());
+      final authService = FirebaseAuthService();
+      await authService.sendPasswordResetEmail(
+        context,
+        _emailController.text.trim(),
+      );
 
       if (mounted) {
         setState(() => _isLoading = false);
-        AppSnackBar.showSuccess(
-          context,
-          'Password reset email sent! Check your inbox.',
-        );
-        Navigator.pop(context);
+        if (Navigator.canPop(context)) {
+          Navigator.pop(context);
+        }
       }
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text('Forgot Password'),
-        backgroundColor: Colors.white,
-        elevation: 0,
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -61,18 +57,14 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: 32),
-                const Text(
-                  'Reset your password',
-                  style: TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                  ),
+                Text(
+                  'Reset Password',
+                  style: theme.textTheme.headlineMedium,   
                 ),
                 const SizedBox(height: 16),
-                const Text(
+                Text(
                   'Enter your email address and we\'ll send you a link to reset your password.',
-                  style: TextStyle(fontSize: 16, color: Colors.grey),
+                  style: theme.textTheme.bodyMedium,   
                 ),
                 const SizedBox(height: 48),
                 AppTextField(
@@ -80,7 +72,9 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                   labelText: 'Email',
                   hintText: 'Enter your email',
                   keyboardType: TextInputType.emailAddress,
-                  validator: (value) => value?.validateEmail(),
+                                     validator: (value) => (value == null || value.isEmpty || !value.contains('@'))
+                      ? 'Please enter a valid email'
+                      : null,
                 ),
                 const SizedBox(height: 32),
                 AppButton(

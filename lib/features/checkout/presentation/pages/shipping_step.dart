@@ -16,6 +16,8 @@ class _ShippingStepState extends State<ShippingStep> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Column(
       children: [
         Expanded(
@@ -28,11 +30,11 @@ class _ShippingStepState extends State<ShippingStep> {
                 children: [
                   Text(
                     'STEP 1',
-                    style: TextStyle(color: Colors.grey[600], fontSize: 12),
+                    style: theme.textTheme.bodySmall?.copyWith(color: Colors.grey[600]),
                   ),
-                  const Text(
+                  Text(
                     'Shipping',
-                    style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+                    style: theme.textTheme.headlineMedium,
                   ),
                   const SizedBox(height: 24),
                   
@@ -67,9 +69,9 @@ class _ShippingStepState extends State<ShippingStep> {
                   ),
                   const SizedBox(height: 32),
                   
-                  const Text(
+                  Text(
                     'Shipping method',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    style: theme.textTheme.titleLarge,
                   ),
                   const SizedBox(height: 16),
                   _buildShippingOption(
@@ -77,24 +79,27 @@ class _ShippingStepState extends State<ShippingStep> {
                     subtitle: 'Delivery from 4 to 7 business days',
                     price: '\$ 0.00',
                     value: 0,
+                    theme: theme
                   ),
                   _buildShippingOption(
                     title: 'Delivery to home',
                     subtitle: 'Delivery from 4 to 6 business days',
                     price: '\$ 9.90',
                     value: 1,
+                    theme: theme
                   ),
                   _buildShippingOption(
                     title: 'Fast Delivery',
                     subtitle: 'Delivery from 2 to 3 business days',
                     price: '\$ 9.90',
                     value: 2,
+                    theme: theme
                   ),
                   
                   const SizedBox(height: 32),
-                  const Text(
+                  Text(
                     'Billing Address',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    style: theme.textTheme.titleLarge,
                   ),
                    CheckboxListTile(
                     value: true,
@@ -102,7 +107,7 @@ class _ShippingStepState extends State<ShippingStep> {
                     title: const Text('Copy address data from shipping'),
                     controlAffinity: ListTileControlAffinity.leading,
                     contentPadding: EdgeInsets.zero,
-                    activeColor: Colors.black,
+                    activeColor: theme.primaryColor,
                   ),
                 ],
               ),
@@ -121,7 +126,6 @@ class _ShippingStepState extends State<ShippingStep> {
             },
             backgroundColor: Colors.black,
             textColor: Colors.white,
-            borderRadius: 30,
           ),
         ),
       ],
@@ -133,6 +137,7 @@ class _ShippingStepState extends State<ShippingStep> {
     required String subtitle,
     required String price,
     required int value,
+    required ThemeData theme,
   }) {
     return RadioListTile<int>(
       value: value,
@@ -142,10 +147,10 @@ class _ShippingStepState extends State<ShippingStep> {
           _selectedShippingMethod = newValue!;
         });
       },
-      title: Text(title, style: const TextStyle(fontWeight: FontWeight.w600)),
-      subtitle: Text(subtitle, style: const TextStyle(color: Colors.grey)),
-      secondary: Text(price, style: const TextStyle(fontWeight: FontWeight.bold)),
-      activeColor: Colors.black,
+      title: Text(title, style: theme.textTheme.titleMedium),
+      subtitle: Text(subtitle, style: theme.textTheme.bodyMedium),
+      secondary: Text(price, style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold)),
+      activeColor: theme.primaryColor,   
       contentPadding: EdgeInsets.zero,
     );
   }

@@ -6,6 +6,8 @@ class OrderCompletedStep extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Padding(
       padding: const EdgeInsets.all(24.0),
       child: Column(
@@ -16,25 +18,21 @@ class OrderCompletedStep extends StatelessWidget {
           Text(
             'Order Completed',
             textAlign: TextAlign.center,
-            style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+            style: theme.textTheme.headlineMedium,   
           ),
           const SizedBox(height: 40),
           
           Icon(
-            Icons.shopping_bag_outlined, 
+            Icons.check_circle_outline_rounded,
             size: 120,
-            color: Colors.grey[800],
+            color: theme.primaryColor,   
           ),
           
           const SizedBox(height: 40),
           Text(
             'Thank you for your purchase.\nYou can view your order in \'My Orders\' section.',
             textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 16,
-              color: Colors.grey[700],
-              height: 1.5,
-            ),
+            style: theme.textTheme.bodyMedium?.copyWith(fontSize: 16, height: 1.5),   
           ),
           const Spacer(),
           
@@ -49,9 +47,8 @@ class OrderCompletedStep extends StatelessWidget {
             },
             backgroundColor: Colors.black,
             textColor: Colors.white,
-            borderRadius: 30,
           ),
-          const SizedBox(height: 20), 
+          const SizedBox(height: 20),
         ],
       ),
     );

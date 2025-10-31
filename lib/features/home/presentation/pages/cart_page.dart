@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:glamour_app/core/widgets/app_button.dart';
 
-
-
 class CartItem {
   final String imageUrl;
   final String name;
@@ -23,7 +21,6 @@ class CartItem {
   });
 }
 
-// 2. الصفحة الرئيسية للسلة (CartPage)
 class CartPage extends StatefulWidget {
   const CartPage({super.key});
 
@@ -32,7 +29,6 @@ class CartPage extends StatefulWidget {
 }
 
 class _CartPageState extends State<CartPage> {
- 
   final List<CartItem> _cartItems = [
     CartItem(
       imageUrl: 'assets/images/photo_3.png',
@@ -42,14 +38,14 @@ class _CartPageState extends State<CartPage> {
       price: 80.00,
     ),
     CartItem(
-      imageUrl: 'assets/images/photo_1.png', 
+      imageUrl: 'assets/images/photo_1.png',
       name: 'Turtleneck Sweater',
       size: 'M',
       color: 'White',
       price: 39.99,
     ),
     CartItem(
-      imageUrl: 'assets/images/item3.png', 
+      imageUrl: 'assets/images/item3.png',
       name: 'Cotton T-shirt',
       size: 'L',
       color: 'Black',
@@ -60,28 +56,25 @@ class _CartPageState extends State<CartPage> {
 
   double get _subtotal {
     return _cartItems
-        .where((item) => item.isSelected) 
+        .where((item) => item.isSelected)
         .fold(0.0, (sum, item) => sum + (item.price * item.quantity));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white, 
+        
       appBar: AppBar(
-        title: const Text(
-          'Your Cart',
-          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-        ),
-        backgroundColor: Colors.white,
-        elevation: 0,
+        title: const Text('Your Cart'),
         centerTitle: true,
+        automaticallyImplyLeading: false, 
       ),
       body: Column(
         children: [
           Expanded(
             child: ListView.builder(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
               itemCount: _cartItems.length,
               itemBuilder: (context, index) {
                 final item = _cartItems[index];
@@ -103,11 +96,10 @@ class _CartPageState extends State<CartPage> {
               },
             ),
           ),
-
           _CartSummary(
             subtotal: _subtotal,
             onCheckout: () {
-              print('Proceed to checkout');
+              Navigator.pushNamed(context, '/checkout');
             },
           ),
         ],
@@ -129,6 +121,8 @@ class _CartItemCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Container(
       padding: const EdgeInsets.all(12.0),
       margin: const EdgeInsets.only(bottom: 16.0),
@@ -156,25 +150,20 @@ class _CartItemCard extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 12),
-          
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   item.name,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                  ),
+                  style: theme.textTheme.titleMedium,   
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
                 const SizedBox(height: 6),
                 Text(
                   'Size: ${item.size} | Color: ${item.color}',
-                  style: TextStyle(fontSize: 13, color: Colors.grey.shade600),
+                  style: theme.textTheme.bodyMedium,   
                 ),
                 const SizedBox(height: 10),
                 Row(
@@ -182,11 +171,9 @@ class _CartItemCard extends StatelessWidget {
                   children: [
                     Text(
                       '\$${item.price.toStringAsFixed(2)}',
-                      style: const TextStyle(
-                        fontSize: 17,
+                      style: theme.textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                      ),
+                      ),   
                     ),
                     _QuantityStepper(
                       quantity: item.quantity,
@@ -197,12 +184,11 @@ class _CartItemCard extends StatelessWidget {
               ],
             ),
           ),
-          
           Checkbox(
             value: item.isSelected,
             onChanged: (val) => onSelected(val ?? false),
-            activeColor: Colors.black,
-            visualDensity: VisualDensity.compact,
+            activeColor: theme.primaryColor,   
+            checkColor: theme.colorScheme.onPrimary,
             side: BorderSide(color: Colors.grey.shade400, width: 1.5),
           ),
         ],
@@ -221,7 +207,7 @@ class _QuantityStepper extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.grey.shade100,
+         color: Theme.of(context).inputDecorationTheme.fillColor ?? Colors.grey[100],
         borderRadius: BorderRadius.circular(20),
       ),
       child: Row(
@@ -259,11 +245,13 @@ class _CartSummary extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Container(
       padding: const EdgeInsets.only(left: 24, right: 24, bottom: 24, top: 16),
       decoration: BoxDecoration(
         color: Colors.white,
-        border: Border(top: BorderSide(color: Colors.grey[200]!, width: 2)),
+        border: Border(top: BorderSide(color: theme.dividerColor, width: 1)),
         boxShadow: [
           BoxShadow(
             color: Colors.grey.withOpacity(0.1),
@@ -275,47 +263,45 @@ class _CartSummary extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          _buildSummaryRow('Product price', '\$${subtotal.toStringAsFixed(2)}'),
+          _buildSummaryRow(
+            'Product price', 
+            '\$${subtotal.toStringAsFixed(2)}',
+            theme
+          ),
           const SizedBox(height: 10),
-          _buildSummaryRow('Shipping', 'Freeship'),
-          const Divider(height: 32, thickness: 1),
+          _buildSummaryRow('Shipping', 'Freeship', theme),
+          Divider(height: 32, thickness: 1, color: theme.dividerColor),
           _buildSummaryRow(
             'Subtotal',
             '\$${subtotal.toStringAsFixed(2)}',
+            theme,
             isBold: true,
           ),
           const SizedBox(height: 24),
           AppButton(
             text: 'Proceed to checkout',
-            onPressed: () {
-              Navigator.pushNamed(context, '/checkout');
-            },
-            backgroundColor: Colors.black,
-            textColor: Colors.white,    
-            borderRadius: 30, 
+            onPressed: onCheckout,
+            backgroundColor: Colors.black, 
+            textColor: Colors.white,      
           ),
         ],
       ),
     );
   }
 
-  Widget _buildSummaryRow(String title, String amount, {bool isBold = false}) {
+  Widget _buildSummaryRow(String title, String amount, ThemeData theme, {bool isBold = false}) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
           title,
-          style: TextStyle(
-            fontSize: 15,
-            color: isBold ? Colors.black : Colors.grey.shade600,
-            fontWeight: isBold ? FontWeight.bold : FontWeight.normal,
-          ),
+          style: isBold
+              ? theme.textTheme.titleMedium
+              : theme.textTheme.bodyMedium,
         ),
         Text(
           amount,
-          style: TextStyle(
-            fontSize: 16,
-            color: Colors.black,
+          style: theme.textTheme.titleMedium?.copyWith(
             fontWeight: isBold ? FontWeight.bold : FontWeight.w600,
           ),
         ),

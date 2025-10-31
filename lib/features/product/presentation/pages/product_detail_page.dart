@@ -309,7 +309,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           ],
         ),
         const SizedBox(height: 16),
-        // عرض أول مراجعتين
         _ReviewCard(
           name: 'Jennifer Rose',
           time: '5m ago',

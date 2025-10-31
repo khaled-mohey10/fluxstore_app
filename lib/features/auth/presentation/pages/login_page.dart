@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:glamour_app/core/constants/app_colors.dart';
-import 'package:glamour_app/core/constants/app_text_styles.dart';
-import 'package:glamour_app/core/extensions/string_extensions.dart';
 import 'package:glamour_app/core/widgets/app_button.dart';
-import 'package:glamour_app/core/widgets/app_snackbar.dart';
 import 'package:glamour_app/core/widgets/app_text_field.dart';
 import 'package:glamour_app/data/services/firebase_auth_service.dart';
 
@@ -24,15 +20,15 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
-    // Check if we came from registration
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final args = ModalRoute.of(context)?.settings.arguments;
       if (args != null && args is Map<String, dynamic>) {
         if (args['fromRegistration'] == true) {
-          // Show the registration success message
-          AppSnackBar.showSuccess(
-            context,
-            'Registration successful! Please log in.',
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Registration successful! Please log in.'),
+              backgroundColor: Colors.green,
+            ),
           );
         }
       }
@@ -49,9 +45,7 @@ class _LoginPageState extends State<LoginPage> {
   Future<void> _handleLogin() async {
     if (_formKey.currentState!.validate()) {
       setState(() => _isLoading = true);
-
       final authService = FirebaseAuthService();
-
       final user = await authService.signInWithEmailAndPassword(
         context,
         _emailController.text.trim(),
@@ -61,7 +55,12 @@ class _LoginPageState extends State<LoginPage> {
       if (mounted) {
         setState(() => _isLoading = false);
         if (user != null) {
-          AppSnackBar.showSuccess(context, 'Login successful!');
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Login successful!'),
+              backgroundColor: Colors.green,
+            ),
+          );
           Navigator.pushReplacementNamed(context, '/home');
         }
       }
@@ -70,12 +69,11 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text('Log into your account'),
-        backgroundColor: Colors.white,
-        elevation: 0,
+        title: const Text('Log In'),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -87,10 +85,13 @@ class _LoginPageState extends State<LoginPage> {
               children: [
                 const SizedBox(height: 32),
                 Text(
-                  'Log into your account',
-                  style: AppTextStyles.headlineMedium.copyWith(
-                    color: Colors.black,
-                  ),
+                  'Welcome Back!',
+                  style: theme.textTheme.headlineMedium,
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  'Please log in to your account.',
+                  style: theme.textTheme.bodyMedium,
                 ),
                 const SizedBox(height: 48),
                 AppTextField(
@@ -98,7 +99,8 @@ class _LoginPageState extends State<LoginPage> {
                   labelText: 'Email',
                   hintText: 'Enter your email',
                   keyboardType: TextInputType.emailAddress,
-                  validator: (value) => value?.validateEmail(),
+                  validator: (value) =>
+                      (value == null || value.isEmpty) ? 'Please enter your email' : null,
                 ),
                 const SizedBox(height: 16),
                 AppTextField(
@@ -109,8 +111,8 @@ class _LoginPageState extends State<LoginPage> {
                   suffixIcon: IconButton(
                     icon: Icon(
                       _obscurePassword
-                          ? Icons.visibility
-                          : Icons.visibility_off,
+                          ? Icons.visibility_off_outlined
+                          : Icons.visibility_outlined,
                       color: Colors.grey,
                     ),
                     onPressed: () {
@@ -119,9 +121,8 @@ class _LoginPageState extends State<LoginPage> {
                       });
                     },
                   ),
-                  validator: (value) => value?.validateNotEmpty(
-                    message: 'Please enter your password',
-                  ),
+                  validator: (value) =>
+                      (value == null || value.isEmpty) ? 'Please enter your password' : null,
                 ),
                 const SizedBox(height: 16),
                 Align(
@@ -130,7 +131,10 @@ class _LoginPageState extends State<LoginPage> {
                     onPressed: () {
                       Navigator.pushNamed(context, '/forgot-password');
                     },
-                    child: const Text('Forgot password?'),
+                    child: Text(
+                      'Forgot password?',
+                      style: TextStyle(color: theme.primaryColor),
+                    ),
                   ),
                 ),
                 const SizedBox(height: 32),
@@ -143,12 +147,21 @@ class _LoginPageState extends State<LoginPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text("Don't have an account?"),
+                    Text(
+                      "Don't have an account?",
+                      style: theme.textTheme.bodyMedium,
+                    ),
                     TextButton(
                       onPressed: () {
                         Navigator.pushNamed(context, '/signup');
                       },
-                      child: const Text('Sign Up'),
+                      child: Text(
+                        'Sign Up',
+                        style: TextStyle(
+                          color: theme.primaryColor,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ),
                   ],
                 ),

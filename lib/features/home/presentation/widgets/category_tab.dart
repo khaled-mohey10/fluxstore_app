@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:glamour_app/core/constants/app_colors.dart';
+import 'package:glamour_app/core/constants/app_colors.dart'; // (سنحتاجه للـ icon)
 
 class CategoryTab extends StatelessWidget {
   final String label;
@@ -17,6 +17,8 @@ class CategoryTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return GestureDetector(
       onTap: onTap,
       child: Column(
@@ -26,15 +28,20 @@ class CategoryTab extends StatelessWidget {
             height: 60,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: isSelected ? AppColors.primary : Colors.grey[800],
+                     color: isSelected ? theme.primaryColor : Colors.white,
+              border: isSelected ? null : Border.all(color: theme.dividerColor),
             ),
-            child: Icon(icon, color: Colors.white, size: 24),
+                 child: Icon(
+              icon, 
+              color: isSelected ? theme.colorScheme.onPrimary : AppColors.text, 
+              size: 24
+            ),
           ),
           const SizedBox(height: 8),
           Text(
             label,
             style: TextStyle(
-              color: isSelected ? AppColors.primary : Colors.grey,
+                     color: isSelected ? theme.primaryColor : Colors.grey,
               fontSize: 12,
               fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
             ),

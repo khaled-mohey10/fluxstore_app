@@ -12,12 +12,11 @@ class SearchResultsScreen extends StatefulWidget {
 }
 
 class _SearchResultsScreenState extends State<SearchResultsScreen> {
-  // --- 🔽 بيانات وهمية محدّثة لتطابق found results.pdf 🔽 ---
   final List<Map<String, String>> _products = [
     {
       'name': 'Linen Dress',
       'price': '\$52.00',
-      'image': 'assets/images/item1.png', // استخدام صورة من المشروع
+      'image': 'assets/images/item1.png',
       'oldPrice': '\$90.00',
       'rating': '5.0',
       'reviews': '64',
@@ -25,7 +24,7 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
     {
       'name': 'Filted Waist Dress',
       'price': '\$47.99',
-      'image': 'assets/images/item2.png', // استخدام صورة من المشروع
+      'image': 'assets/images/item2.png',
       'oldPrice': '\$92.00',
       'rating': '4.0',
       'reviews': '53',
@@ -33,49 +32,26 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
     {
       'name': 'Maxi Dress',
       'price': '\$68.00',
-      'image': 'assets/images/item3.png', // استخدام صورة من المشروع
+      'image': 'assets/images/item3.png',
       'rating': '3.5',
       'reviews': '46',
     },
     {
       'name': 'Front Tie Mini Dress',
       'price': '\$59.00',
-      'image': 'assets/images/photo_1.png', // استخدام صورة من المشروع
+      'image': 'assets/images/photo_1.png',
       'rating': '5.0',
       'reviews': '38',
     },
-    {
-      'name': 'Ohara Dress',
-      'price': '\$85.00',
-      'image': 'assets/images/photo_2.png', // استخدام صورة من المشروع
-      'rating': '4.8',
-      'reviews': '50',
-    },
-    {
-      'name': 'Tie Back Mini Dress',
-      'price': '\$67.00',
-      'image': 'assets/images/photo_3.png', // استخدام صورة من المشروع
-      'rating': '4.2',
-      'reviews': '39',
-    },
   ];
-  // --- 🔼 نهاية البيانات المحدثة 🔼 ---
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-        title: Text(
-          widget.categoryTitle,
-          style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-        ),
+        title: Text(widget.categoryTitle),
         centerTitle: true,
         actions: [
           TextButton(
@@ -87,9 +63,12 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
                 builder: (context) => const FilterBottomSheet(),
               );
             },
-            child: const Text(
+            child: Text(
               'Filter',
-              style: TextStyle(color: Colors.black, fontSize: 16),
+              style: TextStyle(
+                color: theme.textTheme.bodyLarge?.color, 
+                fontSize: 16
+              ),
             ),
           ),
           const SizedBox(width: 8),
@@ -102,27 +81,17 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
             child: RichText(
               text: TextSpan(
-                style: const TextStyle(
-                  color: Colors.black,
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  height: 1.3,
-                ),
+                style: theme.textTheme.headlineSmall,
                 children: [
                   const TextSpan(text: 'Found\n'),
                   TextSpan(
                     text: '${_products.length} Results',
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: theme.textTheme.headlineSmall,
                   ),
                 ],
               ),
             ),
           ),
-
           Expanded(
             child: Padding(
               padding: const EdgeInsets.all(16.0),
@@ -130,8 +99,8 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
                 itemCount: _products.length,
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
-                  mainAxisSpacing: 16, 
-                  crossAxisSpacing: 16, 
+                  mainAxisSpacing: 16,
+                  crossAxisSpacing: 16,
                   childAspectRatio: 0.55, 
                 ),
                 itemBuilder: (context, index) {
@@ -143,7 +112,7 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
                     oldPrice: product['oldPrice'],
                     rating: double.tryParse(product['rating'] ?? '0.0'),
                     reviewCount: int.tryParse(product['reviews'] ?? '0'),
-                    isHorizontal: true, 
+                    isHorizontal: true,
                     onTap: () {
                       Navigator.pushNamed(context, '/product-detail');
                     },

@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:glamour_app/core/constants/app_colors.dart';
 import 'package:glamour_app/data/services/firebase_auth_service.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:glamour_app/features/home/presentation/pages/cart_page.dart';
 import 'package:glamour_app/features/home/presentation/pages/discover_screen.dart';
-
-import 'home_tab.dart';
-import 'cart_page.dart';
-import 'profile_page.dart';
+import 'package:glamour_app/features/home/presentation/pages/home_tab.dart';
+import 'package:glamour_app/features/home/presentation/pages/profile_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -16,48 +13,63 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  int _currentIndex = 0;
+  int _selectedIndex = 0;
 
-  final List<Widget> _pages = [
-    const HomeTab(),
-    const DiscoverScreen(),
-    const CartPage(),
-    const ProfilePage(),
+  static const List<Widget> _widgetOptions = <Widget>[
+    HomeTab(),
+    DiscoverScreen(),
+    CartPage(),
+    ProfilePage(),
   ];
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
       drawer: Drawer(
         child: ListView(
           padding: EdgeInsets.zero,
-          children: [
-            DrawerHeader(
-              decoration: BoxDecoration(color: Colors.grey[900]),
-              child: const Text(
+          children: <Widget>[
+             DrawerHeader(
+              decoration: BoxDecoration(
+                color: Theme.of(context).primaryColor, 
+              ),
+              child: Text(
                 'Menu',
-                style: TextStyle(color: Colors.white, fontSize: 24),
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.onPrimary,
+                  fontSize: 24
+                ),
               ),
             ),
             ListTile(
-              leading: const Icon(Icons.person),
+              leading: const Icon(Icons.person_outline),
               title: const Text('Profile'),
               onTap: () {
                 Navigator.pop(context);
-                setState(() {
-                  _currentIndex = 3; // Profile tab index
-                });
+                _onItemTapped(3); 
               },
             ),
             ListTile(
-              leading: const Icon(Icons.settings),
+              leading: const Icon(Icons.shopping_bag_outlined),
+              title: const Text('My Orders'),
+              onTap: () {
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.settings_outlined),
               title: const Text('Settings'),
               onTap: () {
                 Navigator.pop(context);
-                Navigator.pushNamed(context, '/settings');
               },
             ),
+            const Divider(),
             ListTile(
               leading: const Icon(Icons.logout),
               title: const Text('Logout'),
@@ -73,27 +85,34 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
-      body: _pages[_currentIndex],
+      body: Center(
+        child: _widgetOptions.elementAt(_selectedIndex),
+      ),
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentIndex,
-        onTap: (index) {
-          setState(() {
-            _currentIndex = index;
-          });
-        },
-        type: BottomNavigationBarType.fixed,
-        backgroundColor: Colors.grey[900],
-        selectedItemColor: Colors.white,
-        unselectedItemColor: Colors.grey,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.explore), label: 'Discover'),
+        items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.shopping_cart),
+            icon: Icon(Icons.home_outlined),
+            activeIcon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.search),
+            activeIcon: Icon(Icons.search_sharp), 
+            label: 'Discover',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.shopping_cart_outlined),
+            activeIcon: Icon(Icons.shopping_cart),
             label: 'Cart',
           ),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person_outline),
+            activeIcon: Icon(Icons.person),
+            label: 'Profile',
+          ),
         ],
+        currentIndex: _selectedIndex,
+        onTap: _onItemTapped,
       ),
     );
   }

@@ -48,7 +48,6 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
             decoration: const BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.only(
-                // جعل الحواف دائرية من اليسار فقط
                 topLeft: Radius.circular(30.0),
                 bottomLeft: Radius.circular(30.0),
               ),
@@ -56,12 +55,10 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // المحتوى القابل للتمرير
                 Expanded(
                   child: ListView(
                     padding: EdgeInsets.zero,
                     children: [
-                      // Header
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -232,7 +229,6 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                       Expanded(
                         child: OutlinedButton(
                           onPressed: () {
-                            // Reset Logic
                             setState(() {
                               _currentRangeValues = const RangeValues(10, 80);
                               _selectedColorIndex = 0;
@@ -254,7 +250,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                       Expanded(
                         child: ElevatedButton(
                           onPressed: () {
-                            Navigator.pop(context); // Close the filter
+                            Navigator.pop(context); 
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.black,

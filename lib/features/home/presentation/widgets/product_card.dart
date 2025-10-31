@@ -5,14 +5,12 @@ class ProductCard extends StatelessWidget {
   final String imageUrl;
   final String name;
   final String price;
-  final bool isHorizontal; // هذا الاسم مربك، لكننا سنلتزم به
+  final bool isHorizontal; 
   final VoidCallback? onTap;
 
-  // --- 🔽 الإضافات الجديدة 🔽 ---
   final String? oldPrice;
   final double? rating;
   final int? reviewCount;
-  // --- 🔼 الإضافات الجديدة 🔼 ---
 
   const ProductCard({
     super.key,
@@ -21,14 +19,11 @@ class ProductCard extends StatelessWidget {
     required this.price,
     this.isHorizontal = true,
     this.onTap,
-    // --- 🔽 الإضافات الجديدة 🔽 ---
     this.oldPrice,
     this.rating,
     this.reviewCount,
-    // --- 🔼 الإضافات الجديدة 🔼 ---
   });
 
-  // البطاقة ذات الخلفية الداكنة (القديمة)
   Widget _buildVerticalCard() {
     return GestureDetector(
       onTap: onTap,
@@ -80,7 +75,6 @@ class ProductCard extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  // يمكن إضافة السعر القديم والتقييم هنا أيضًا إذا أردت
                 ],
               ),
             ),
@@ -92,8 +86,7 @@ class ProductCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // isHorizontal: true = البطاقة البيضاء (لصفحة البحث والصفحة الرئيسية)
-    // isHorizontal: false = البطاقة الداكنة (غير مستخدمة حاليًا في البحث)
+  
     if (isHorizontal) {
       return _buildHorizontalCard();
     } else {
@@ -101,12 +94,10 @@ class ProductCard extends StatelessWidget {
     }
   }
 
-  // البطاقة ذات الخلفية البيضاء (الجديدة المطابقة لـ found results.pdf)
   Widget _buildHorizontalCard() {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        // العرض يتم تحديده بواسطة الـ GridView
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(12),
@@ -121,7 +112,6 @@ class ProductCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // صورة المنتج
             ClipRRect(
               borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(12),
@@ -130,13 +120,11 @@ class ProductCard extends StatelessWidget {
               child: Image.asset(
                 imageUrl,
                 fit: BoxFit.cover,
-                // تحديد ارتفاع نسبي للصورة لجعل البطاقات متجاوبة
                 height: 180, 
                 width: double.infinity,
               ),
             ),
             
-            // التفاصيل
             Padding(
               padding: const EdgeInsets.all(12),
               child: Column(
@@ -154,7 +142,6 @@ class ProductCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 6),
                   
-                  // --- 🔽 التعديل هنا (إضافة الأسعار) 🔽 ---
                   Row(
                     children: [
                       Text(
@@ -178,9 +165,7 @@ class ProductCard extends StatelessWidget {
                       ],
                     ],
                   ),
-                  // --- 🔼 التعديل هنا 🔼 ---
-
-                  // --- 🔽 التعديل هنا (إضافة التقييم) 🔽 ---
+ 
                   if (rating != null && reviewCount != null) ...[
                     const SizedBox(height: 6),
                     Row(
@@ -204,8 +189,7 @@ class ProductCard extends StatelessWidget {
                       ],
                     ),
                   ],
-                  // --- 🔼 التعديل هنا 🔼 ---
-                ],
+                 ],
               ),
             ),
           ],
@@ -215,8 +199,7 @@ class ProductCard extends StatelessWidget {
   }
 }
 
-// ... (ProductCardList سيبقى كما هو من المرة السابقة) ...
-// (الكود الذي أضفناه في الخطوة 6 سيعمل مباشرة مع هذا التعديل)
+
 
 class ProductCardList extends StatelessWidget {
   final String title;
@@ -266,7 +249,7 @@ class ProductCardList extends StatelessWidget {
         ),
         if (isHorizontal)
           SizedBox(
-            height: 300, // الارتفاع هنا مضبوط للبطاقة الجديدة
+            height: 300, 
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
               padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -277,9 +260,9 @@ class ProductCardList extends StatelessWidget {
                   imageUrl: product['image'] ?? '',
                   name: product['name'] ?? '',
                   price: product['price'] ?? '',
-                  oldPrice: product['oldPrice'], // تمرير البيانات
-                  rating: double.tryParse(product['rating'] ?? ''), // تمرير البيانات
-                  reviewCount: int.tryParse(product['reviews'] ?? ''), // تمرير البيانات
+                  oldPrice: product['oldPrice'], 
+                  rating: double.tryParse(product['rating'] ?? ''), 
+                  reviewCount: int.tryParse(product['reviews'] ?? ''), 
                   isHorizontal: true,
                   onTap: () {
                     if (onItemTap != null) {
@@ -301,7 +284,7 @@ class ProductCardList extends StatelessWidget {
                 crossAxisCount: 2,
                 mainAxisSpacing: 16,
                 crossAxisSpacing: 16,
-                childAspectRatio: 0.6, // نسبة العرض للارتفاع للبطاقة في الشبكة
+                childAspectRatio: 0.6, 
               ),
               itemBuilder: (context, index) {
                 final product = products[index];
@@ -309,10 +292,10 @@ class ProductCardList extends StatelessWidget {
                   imageUrl: product['image'] ?? '',
                   name: product['name'] ?? '',
                   price: product['price'] ?? '',
-                  oldPrice: product['oldPrice'], // تمرير البيانات
-                  rating: double.tryParse(product['rating'] ?? ''), // تمرير البيانات
-                  reviewCount: int.tryParse(product['reviews'] ?? ''), // تمرير البيانات
-                  isHorizontal: true, // !! استخدام البطاقة البيضاء !!
+                  oldPrice: product['oldPrice'],
+                  rating: double.tryParse(product['rating'] ?? ''), 
+                  reviewCount: int.tryParse(product['reviews'] ?? ''), 
+                  isHorizontal: true, 
                   onTap: () {
                     if (onItemTap != null) {
                       onItemTap!(product);

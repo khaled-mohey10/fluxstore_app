@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:glamour_app/features/home/presentation/widgets/filter_bottom_sheet.dart'; 
-import 'package:glamour_app/features/home/presentation/widgets/product_card.dart'; 
+import 'package:glamour_app/features/home/presentation/widgets/filter_bottom_sheet.dart';
 import 'package:glamour_app/features/search/presentation/pages/search_results_screen.dart';
 
 class SearchScreen extends StatefulWidget {
@@ -12,22 +11,22 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen> {
   final TextEditingController _searchController = TextEditingController();
-  final List<String> _recentSearches = ['Sunglasses', 'Sweater', 'Hoodie'];  
+  final List<String> _recentSearches = ['Sunglasses', 'Sweater', 'Hoodie'];
   final List<Map<String, String>> _popularItems = [
     {
       'name': 'Lihua Tunic White',
       'price': '\$53.00',
-      'image': 'assets/images/item1.png', 
+      'image': 'assets/images/item1.png',
     },
     {
       'name': 'Skirt Dress',
       'price': '\$34.00',
-      'image': 'assets/images/item2.png', 
+      'image': 'assets/images/item2.png',
     },
     {
       'name': 'Another Item',
       'price': '\$45.00',
-      'image': 'assets/images/item3.png', 
+      'image': 'assets/images/item3.png',
     },
   ];
 
@@ -39,38 +38,39 @@ class _SearchScreenState extends State<SearchScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          icon: const Icon(Icons.arrow_back), 
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: TextField(
           controller: _searchController,
-          autofocus: true, 
+          autofocus: true,
           decoration: InputDecoration(
             hintText: "Search dresses, shoes, etc",
-            hintStyle: TextStyle(color: Colors.grey.shade400),
+            hintStyle: TextStyle(color: Colors.grey.shade500),
             border: InputBorder.none,
-            filled: false, 
+            enabledBorder: InputBorder.none, 
+            focusedBorder: InputBorder.none, 
+            filled: false,
           ),
-          style: const TextStyle(color: Colors.black, fontSize: 16),
+          style: theme.textTheme.bodyLarge,
           onSubmitted: (query) {
             if (query.isNotEmpty) {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => SearchResultsScreen(categoryTitle: query), 
+                  builder: (context) =>
+                      SearchResultsScreen(categoryTitle: query),
                 ),
               );
             }
           },
         ),
         actions: [
-          
           IconButton(
             icon: const Icon(Icons.clear, color: Colors.grey),
             onPressed: () {
@@ -90,31 +90,31 @@ class _SearchScreenState extends State<SearchScreen> {
           ),
         ],
       ),
-      body: ListView( 
+      body: ListView(
         padding: const EdgeInsets.all(16.0),
         children: [
-          _buildSectionTitle('Recent Searches'),
+          _buildSectionTitle('Recent Searches', theme),
           Wrap(
-            spacing: 8.0, 
-            runSpacing: 4.0, 
-            children: _recentSearches.map((term) => _buildChip(term)).toList(),
+            spacing: 8.0,
+            runSpacing: 4.0,
+            children: _recentSearches.map((term) => _buildChip(term, theme)).toList(),
           ),
           const SizedBox(height: 24),
-
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              _buildSectionTitle('Popular this week'),
+              _buildSectionTitle('Popular this week', theme),
               TextButton(
-                onPressed: (){
+                onPressed: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const SearchResultsScreen(categoryTitle: "Popular Items"),
+                      builder: (context) =>
+                          const SearchResultsScreen(categoryTitle: "Popular Items"),
                     ),
                   );
                 },
-                child: const Text('Show all', style: TextStyle(color: Colors.grey)),
+                child: Text('Show all', style: theme.textTheme.bodyMedium),
               )
             ],
           ),
@@ -136,7 +136,7 @@ class _SearchScreenState extends State<SearchScreen> {
                         height: 180,
                         width: double.infinity,
                         decoration: BoxDecoration(
-                          color: Colors.grey.shade100, 
+                          color: Colors.grey.shade100,
                           borderRadius: BorderRadius.circular(12),
                           image: DecorationImage(
                             image: AssetImage(item['image'] ?? ''),
@@ -147,14 +147,17 @@ class _SearchScreenState extends State<SearchScreen> {
                       const SizedBox(height: 8),
                       Text(
                         item['name'] ?? '',
-                        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                        style: theme.textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w500),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       ),
                       const SizedBox(height: 4),
                       Text(
                         item['price'] ?? '',
-                        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black),
+                        style: theme.textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: theme.primaryColor, 
+                        ),
                       ),
                     ],
                   ),
@@ -167,27 +170,31 @@ class _SearchScreenState extends State<SearchScreen> {
     );
   }
 
-  Widget _buildSectionTitle(String title) {
+  Widget _buildSectionTitle(String title, ThemeData theme) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12.0),
       child: Text(
         title,
-        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black),
+        style: theme.textTheme.titleMedium, 
       ),
     );
   }
 
-  Widget _buildChip(String label) {
+  Widget _buildChip(String label, ThemeData theme) {
     return Chip(
-      label: Text(label, style: const TextStyle(color: Colors.black54)),
-      backgroundColor: Colors.grey.shade200,
+      label: Text(label, style: TextStyle(color: theme.textTheme.bodyLarge?.color)),
+      backgroundColor: theme.inputDecorationTheme.fillColor ?? Colors.grey[100],
       deleteIcon: const Icon(Icons.close, size: 16, color: Colors.black54),
       onDeleted: () {
         setState(() {
-          _recentSearches.remove(label); 
+          _recentSearches.remove(label);
         });
       },
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8),
+        side: BorderSide(color: Colors.grey[300]!)
+      ),
     );
   }
 }

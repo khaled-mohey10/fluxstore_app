@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:glamour_app/core/constants/app_colors.dart';
 
 class AppTextField extends StatelessWidget {
   final TextEditingController? controller;
@@ -14,7 +15,7 @@ class AppTextField extends StatelessWidget {
   final int? minLines;
   final bool enabled;
   final TextStyle? style;
-  final String? initialValue;
+  final String? initialValue; 
 
   const AppTextField({
     super.key,
@@ -34,12 +35,13 @@ class AppTextField extends StatelessWidget {
     this.initialValue, 
   }) : assert( 
           controller == null || initialValue == null,
-          'لا يمكن استخدام controller و initialValue في نفس الوقت. '
-          'استخدم: controller: TextEditingController(text: initialValue)',
+          'لا يمكن استخدام controller و initialValue في نفس الوقت.',
         );
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return TextFormField(
       controller: controller,
       initialValue: initialValue, 
@@ -50,33 +52,14 @@ class AppTextField extends StatelessWidget {
       maxLines: maxLines,
       minLines: minLines,
       enabled: enabled,
-      style: style ?? const TextStyle(color: Colors.black, fontSize: 16),
+      style: style ?? theme.textTheme.bodyLarge?.copyWith(color: AppColors.text), 
       decoration: InputDecoration(
         hintText: hintText,
-        prefixIcon: prefixIcon,
         labelText: labelText,
+        prefixIcon: prefixIcon,
         suffixIcon: suffixIcon,
-        filled: true,
-        fillColor: Colors.grey[100],
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: BorderSide.none,
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: BorderSide.none,
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: const BorderSide(color: Colors.blue),
-        ),
-        errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: const BorderSide(color: Colors.red),
-        ),
-        hintStyle: const TextStyle(color: Colors.grey),
-        labelStyle: const TextStyle(color: Colors.black),
-        errorStyle: const TextStyle(color: Colors.red),
+
+        
         contentPadding: const EdgeInsets.symmetric(
           horizontal: 16,
           vertical: 16,
