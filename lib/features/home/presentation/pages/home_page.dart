@@ -35,15 +35,13 @@ class _HomePageState extends State<HomePage> {
         child: ListView(
           padding: EdgeInsets.zero,
           children: <Widget>[
-             DrawerHeader(
-              decoration: BoxDecoration(
-                color: Theme.of(context).primaryColor, 
-              ),
+            DrawerHeader(
+              decoration: BoxDecoration(color: Theme.of(context).primaryColor),
               child: Text(
                 'Menu',
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.onPrimary,
-                  fontSize: 24
+                  fontSize: 24,
                 ),
               ),
             ),
@@ -52,7 +50,7 @@ class _HomePageState extends State<HomePage> {
               title: const Text('Profile'),
               onTap: () {
                 Navigator.pop(context);
-                _onItemTapped(3); 
+                _onItemTapped(3);
               },
             ),
             ListTile(
@@ -60,6 +58,7 @@ class _HomePageState extends State<HomePage> {
               title: const Text('My Orders'),
               onTap: () {
                 Navigator.pop(context);
+                Navigator.pushNamed(context, '/my-orders');
               },
             ),
             ListTile(
@@ -85,9 +84,7 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
-      body: Center(
-        child: _widgetOptions.elementAt(_selectedIndex),
-      ),
+      body: Center(child: _widgetOptions.elementAt(_selectedIndex)),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
@@ -97,7 +94,7 @@ class _HomePageState extends State<HomePage> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.search),
-            activeIcon: Icon(Icons.search_sharp), 
+            activeIcon: Icon(Icons.search_sharp),
             label: 'Discover',
           ),
           BottomNavigationBarItem(

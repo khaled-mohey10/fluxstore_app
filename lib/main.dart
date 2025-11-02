@@ -6,6 +6,8 @@ import 'package:glamour_app/features/auth/presentation/pages/forgot_password_pag
 import 'package:glamour_app/features/auth/presentation/pages/login_page.dart';
 import 'package:glamour_app/features/auth/presentation/pages/signup_page.dart';
 import 'package:glamour_app/features/home/presentation/pages/home_page.dart';
+import 'package:glamour_app/features/orders/presentation/pages/my_orders_page.dart';
+import 'package:glamour_app/features/orders/presentation/pages/order_info_page.dart';
 import 'package:glamour_app/features/search/presentation/pages/search_screen.dart';
 import 'package:glamour_app/screens/welcome_screen.dart';
 import 'package:glamour_app/screens/onboarding_screen.dart';
@@ -123,6 +125,9 @@ class GlamourApp extends StatelessWidget {
         '/search': (context) => const SearchScreen(),
         '/product-detail': (context) => const ProductDetailPage(),
         '/checkout': (context) => const CheckoutPage(),
+        '/my-orders': (context) => const MyOrdersPage(),
+        '/order-info': (context) => const OrderInfoPage(),
+
       },
     );
   }
