@@ -9,15 +9,56 @@ class BannerCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Container(
       height: height,
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
-        image: DecorationImage(
-          image: AssetImage(imageUrl),
-          fit: BoxFit.fitWidth,
+      child: Stack(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(16),
+              image: DecorationImage(
+                image: AssetImage(imageUrl),
+                fit: BoxFit.cover, 
+              ),
+            ),
+          ),
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(16),
+              color: Colors.black.withOpacity(0.15), 
+            ),
+          ),
+          Positioned(
+  top: 20,
+  right: 20,
+  child: Column(
+    crossAxisAlignment: CrossAxisAlignment.start, 
+    mainAxisSize: MainAxisSize.min,
+    children: [
+      Text(
+        'Autumn \nCollection',
+        style: theme.textTheme.headlineSmall?.copyWith(
+          color: Colors.white,
+          fontWeight: FontWeight.bold,
+          fontSize: 24,
         ),
+      ),
+      Text(
+        '2025',
+        style: theme.textTheme.headlineMedium?.copyWith(
+          color: Colors.white,
+          fontWeight: FontWeight.bold,
+          fontSize: 24,
+        ),
+      ),
+    ],
+  ),
+),
+
+        ],
       ),
     );
   }

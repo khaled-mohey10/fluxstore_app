@@ -21,7 +21,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.glamour_app"
-        minSdk = flutter.minSdkVersion   // ✅ تعديل هنا
+        minSdk = flutter.minSdkVersion   
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"

@@ -27,21 +27,21 @@ class WelcomeScreen extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Spacer(flex: 2),
+                  const Spacer(flex: 4),
                   Text(
-                    'Welcome to Glamour',
+                    'Welcome to GemStore!', 
                     style: theme.textTheme.headlineLarge
                         ?.copyWith(color: Colors.white),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 16),
                   Text(
-                    'Discover everything new',
+                    'The home for a fashionista',
                     style: theme.textTheme.bodyLarge
                         ?.copyWith(color: Colors.white70), 
                     textAlign: TextAlign.center,
                   ),
-                  const Spacer(flex: 3),
+                  const Spacer(flex: 2),
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
@@ -54,11 +54,11 @@ class WelcomeScreen extends StatelessWidget {
                         );
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white,
+                        backgroundColor: Colors.white.withOpacity(0.9), 
                         foregroundColor: AppColors.text, 
                       ),
                       child: const Text(
-                        'Getting Started',
+                        'Get Started',  
                         style: TextStyle(fontSize: 18),
                       ),
                     ),

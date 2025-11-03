@@ -75,7 +75,7 @@ class _SignupPageState extends State<SignupPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Sign Up'),
+        title: const Text(''),  
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -87,18 +87,14 @@ class _SignupPageState extends State<SignupPage> {
               children: [
                 const SizedBox(height: 32),
                 Text(
-                  'Create Account',
+                  'Create\nyour account',  
                   style: theme.textTheme.headlineMedium,
                 ),
-                const SizedBox(height: 8),
-                Text(
-                  'Start your journey with us.',
-                  style: theme.textTheme.bodyMedium,
-                ),
+                 
                 const SizedBox(height: 48),
                 AppTextField(
                   controller: _nameController,
-                  labelText: 'Full Name',
+                  labelText: 'Enter your name',  
                   hintText: 'Enter your full name',
                   validator: (value) =>
                       (value == null || value.isEmpty) ? 'Please enter your name' : null,
@@ -106,7 +102,7 @@ class _SignupPageState extends State<SignupPage> {
                 const SizedBox(height: 16),
                 AppTextField(
                   controller: _emailController,
-                  labelText: 'Email',
+                  labelText: 'Email address',  
                   hintText: 'Enter your email',
                   keyboardType: TextInputType.emailAddress,
                   validator: (value) =>
@@ -115,7 +111,7 @@ class _SignupPageState extends State<SignupPage> {
                 const SizedBox(height: 16),
                 AppTextField(
                   controller: _passwordController,
-                  labelText: 'Password',
+                  labelText: 'Password',  
                   hintText: 'Enter your password',
                   obscureText: _obscurePassword,
                   suffixIcon: IconButton(
@@ -138,7 +134,7 @@ class _SignupPageState extends State<SignupPage> {
                 const SizedBox(height: 16),
                 AppTextField(
                   controller: _confirmPasswordController,
-                  labelText: 'Confirm Password',
+                  labelText: 'Confirm password',  
                   hintText: 'Confirm your password',
                   obscureText: _obscureConfirmPassword,
                   suffixIcon: IconButton(
@@ -162,13 +158,17 @@ class _SignupPageState extends State<SignupPage> {
                   text: 'SIGN UP',
                   onPressed: _handleSignup,
                   isLoading: _isLoading,
+                  backgroundColor: Colors.black,  
+                  textColor: Colors.white,
                 ),
+                const SizedBox(height: 32),  
+                _buildSocialLogin(context),  
                 const SizedBox(height: 16),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'Already have an account?',
+                      'Already have account?',  
                       style: theme.textTheme.bodyMedium,
                     ),
                     TextButton(
@@ -178,7 +178,7 @@ class _SignupPageState extends State<SignupPage> {
                       child: Text(
                         'Log In',
                         style: TextStyle(
-                          color: theme.primaryColor,
+                          color: Colors.black,  
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -188,6 +188,59 @@ class _SignupPageState extends State<SignupPage> {
               ],
             ),
           ),
+        ),
+      ),
+    );
+  }
+
+    // --- ويدجت جديد لأيقونات السوشيال ---
+  Widget _buildSocialLogin(BuildContext context) {
+    return Column(
+      children: [
+        Row(
+          children: [
+            const Expanded(child: Divider()),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Text(
+                'or sign up with',
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
+            ),
+            const Expanded(child: Divider()),
+          ],
+        ),
+        const SizedBox(height: 24),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            _buildSocialIcon(context, 'assets/images/apple.png'),
+            const SizedBox(width: 24),
+            _buildSocialIcon(context, 'assets/images/google.png'),
+            const SizedBox(width: 24),
+            _buildSocialIcon(context, 'assets/images/facebook.png'),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildSocialIcon(BuildContext context, String assetPath) {
+    return InkWell(
+      onTap: () {
+        // TODO: Implement social login
+      },
+      borderRadius: BorderRadius.circular(30),
+      child: Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          border: Border.all(color: Colors.grey[300]!, width: 1),
+        ),
+        child: Image.asset(
+          assetPath,
+          height: 24,
+          width: 24,
         ),
       ),
     );

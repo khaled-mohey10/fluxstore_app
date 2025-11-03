@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:glamour_app/features/auth/presentation/pages/login_page.dart';
-import 'package:glamour_app/features/auth/presentation/pages/signup_page.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -48,13 +47,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     }
   }
 
-  void _skipOnboarding() {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => const LoginPage()),
-    );
-  }
-
   void _completeOnboarding() {
     Navigator.pushReplacement(
       context,
@@ -65,35 +57,56 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final screenHeight = MediaQuery.of(context).size.height;
+    final double halfHeight = screenHeight * 0.55;
 
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Stack(
         children: [
+          Positioned(
+            bottom: 0,
+            left: 0,
+            right: 0,
+            height: halfHeight,
+            child: Container(color: const Color(0xFF4B4B4B)),
+          ),
           PageView.builder(
             controller: _pageController,
             onPageChanged: _onPageChanged,
             itemCount: introScreens.length,
             itemBuilder: (context, index) {
-              return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset(introScreens[index]['image']!),
-                    const SizedBox(height: 40),
-                    Text(
-                      introScreens[index]['title']!,
-                      style: theme.textTheme.headlineMedium, 
-                      textAlign: TextAlign.center,
+              return Stack(
+                alignment: Alignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                    child: Column(
+                      children: [
+                        const SizedBox(height: 100),
+                        Text(
+                          introScreens[index]['title']!,
+                          style: theme.textTheme.headlineMedium,
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(height: 12),
+                        Text(
+                          introScreens[index]['description']!,
+                          style: theme.textTheme.bodyMedium?.copyWith(fontSize: 16),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
                     ),
-                    const SizedBox(height: 12),
-                    Text(
-                      introScreens[index]['description']!,
-                      style: theme.textTheme.bodyMedium?.copyWith(fontSize: 16), 
-                      textAlign: TextAlign.center,
+                  ),
+                  Positioned(
+                    bottom: halfHeight - 180,
+                    child: Image.asset(
+                      introScreens[index]['image']!,
+                      height: 380,
+                      fit: BoxFit.contain,
                     ),
-                  ],
-                ),
+                  ),
+                ],
               );
             },
           ),
@@ -101,20 +114,21 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             top: 50,
             right: 24,
             child: TextButton(
-              onPressed: _skipOnboarding,
+              onPressed: _completeOnboarding,
               child: Text(
                 'Skip',
-                style: theme.textTheme.bodyLarge, 
+                style: theme.textTheme.bodyLarge?.copyWith(color: Colors.grey[700]),
               ),
             ),
           ),
           Positioned(
-            bottom: 50,
+            bottom: 0,
             left: 0,
             right: 0,
+            height: halfHeight,
             child: Column(
-              mainAxisSize: MainAxisSize.min,
               children: [
+                const Spacer(flex: 4),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: List.generate(
@@ -125,8 +139,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       height: 10,
                       decoration: BoxDecoration(
                         color: index == _currentPage
-                            ? theme.primaryColor
-                            : Colors.grey[300],
+                            ? Colors.white
+                            : Colors.grey[600],
                         shape: BoxShape.circle,
                       ),
                     ),
@@ -140,14 +154,18 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     height: 55,
                     child: ElevatedButton(
                       onPressed: _nextPage,
-                      child: Text(
-                        _currentPage == introScreens.length - 1 
-                          ? 'Get Started' 
-                          : 'Next',
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white.withOpacity(0.9),
+                        foregroundColor: Colors.black,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        ),
                       ),
+                      child: const Text('Shopping now'),
                     ),
                   ),
                 ),
+                const Spacer(flex: 2),
               ],
             ),
           ),

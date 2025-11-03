@@ -38,7 +38,7 @@ class _ShippingStepState extends State<ShippingStep> {
                   ),
                   const SizedBox(height: 24),
                   
-                  AppTextField(labelText: 'First name *', initialValue: 'Pham'),
+                  AppTextField(labelText: 'First name *', initialValue: 'Khaled'),
                   const SizedBox(height: 16),
                   AppTextField(
                     labelText: 'Last name *',

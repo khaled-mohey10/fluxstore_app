@@ -201,7 +201,7 @@ class _PaymentStepState extends State<PaymentStep> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'CARDHOLDER NAME\nSunie Pham',
+                'CARDHOLDER NAME\nSunie Khaled',
                 style: TextStyle(color: Colors.white, fontSize: 12),
               ),
               Text(

@@ -28,12 +28,12 @@ class CategoryTab extends StatelessWidget {
             height: 60,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-                     color: isSelected ? theme.primaryColor : Colors.white,
+                     color: isSelected ? Colors.black : Colors.white,  
               border: isSelected ? null : Border.all(color: theme.dividerColor),
             ),
                  child: Icon(
               icon, 
-              color: isSelected ? theme.colorScheme.onPrimary : AppColors.text, 
+              color: isSelected ? Colors.white : AppColors.text,  
               size: 24
             ),
           ),
@@ -41,7 +41,7 @@ class CategoryTab extends StatelessWidget {
           Text(
             label,
             style: TextStyle(
-                     color: isSelected ? theme.primaryColor : Colors.grey,
+                     color: isSelected ? Colors.black : Colors.grey,  
               fontSize: 12,
               fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
             ),

@@ -46,7 +46,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Forgot Password'),
+        title: const Text(''), 
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -58,19 +58,20 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
               children: [
                 const SizedBox(height: 32),
                 Text(
-                  'Reset Password',
+                  'Forgot password?', 
                   style: theme.textTheme.headlineMedium,   
                 ),
                 const SizedBox(height: 16),
                 Text(
-                  'Enter your email address and we\'ll send you a link to reset your password.',
-                  style: theme.textTheme.bodyMedium,   
+                  'Enter email associated with your account and we\'ll send and email with intructions to reset your password',  
+                  style: theme.textTheme.bodyMedium?.copyWith(fontSize: 16),   
                 ),
                 const SizedBox(height: 48),
                 AppTextField(
                   controller: _emailController,
-                  labelText: 'Email',
-                  hintText: 'Enter your email',
+                  labelText: null, 
+                  hintText: 'enter your email here',
+                  prefixIcon: const Icon(Icons.email_outlined, color: Colors.grey), 
                   keyboardType: TextInputType.emailAddress,
                                      validator: (value) => (value == null || value.isEmpty || !value.contains('@'))
                       ? 'Please enter a valid email'
@@ -78,9 +79,11 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                 ),
                 const SizedBox(height: 32),
                 AppButton(
-                  text: 'SEND RESET LINK',
+                  text: 'SEND', 
                   onPressed: _handleForgotPassword,
                   isLoading: _isLoading,
+                  backgroundColor: Colors.black, 
+                  textColor: Colors.white,
                 ),
               ],
             ),

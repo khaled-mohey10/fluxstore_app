@@ -73,7 +73,7 @@ class _LoginPageState extends State<LoginPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Log In'),
+        title: const Text(''),  
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -85,18 +85,14 @@ class _LoginPageState extends State<LoginPage> {
               children: [
                 const SizedBox(height: 32),
                 Text(
-                  'Welcome Back!',
+                  'Log into\nyour account',  
                   style: theme.textTheme.headlineMedium,
                 ),
-                const SizedBox(height: 8),
-                Text(
-                  'Please log in to your account.',
-                  style: theme.textTheme.bodyMedium,
-                ),
+                 
                 const SizedBox(height: 48),
                 AppTextField(
                   controller: _emailController,
-                  labelText: 'Email',
+                  labelText: 'Email address',  
                   hintText: 'Enter your email',
                   keyboardType: TextInputType.emailAddress,
                   validator: (value) =>
@@ -132,8 +128,8 @@ class _LoginPageState extends State<LoginPage> {
                       Navigator.pushNamed(context, '/forgot-password');
                     },
                     child: Text(
-                      'Forgot password?',
-                      style: TextStyle(color: theme.primaryColor),
+                      'Forgot Password?',
+                      style: TextStyle(color: theme.textTheme.bodyMedium?.color),
                     ),
                   ),
                 ),
@@ -142,7 +138,11 @@ class _LoginPageState extends State<LoginPage> {
                   text: 'LOG IN',
                   onPressed: _handleLogin,
                   isLoading: _isLoading,
+                  backgroundColor: Colors.black, 
+                  textColor: Colors.white,
                 ),
+                const SizedBox(height: 32), 
+                _buildSocialLogin(context), 
                 const SizedBox(height: 16),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -158,7 +158,7 @@ class _LoginPageState extends State<LoginPage> {
                       child: Text(
                         'Sign Up',
                         style: TextStyle(
-                          color: theme.primaryColor,
+                          color: Colors.black, 
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -168,6 +168,58 @@ class _LoginPageState extends State<LoginPage> {
               ],
             ),
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSocialLogin(BuildContext context) {
+    return Column(
+      children: [
+        Row(
+          children: [
+            const Expanded(child: Divider()),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Text(
+                'or log in with',
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
+            ),
+            const Expanded(child: Divider()),
+          ],
+        ),
+        const SizedBox(height: 24),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            _buildSocialIcon(context, 'assets/images/apple.png'),
+            const SizedBox(width: 24),
+            _buildSocialIcon(context, 'assets/images/google.png'),
+            const SizedBox(width: 24),
+            _buildSocialIcon(context, 'assets/images/facebook.png'),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildSocialIcon(BuildContext context, String assetPath) {
+    return InkWell(
+      onTap: () {
+        // TODO: Implement social login
+      },
+      borderRadius: BorderRadius.circular(30),
+      child: Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          border: Border.all(color: Colors.grey[300]!, width: 1),
+        ),
+        child: Image.asset(
+          assetPath,
+          height: 24,
+          width: 24,
         ),
       ),
     );

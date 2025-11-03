@@ -67,7 +67,7 @@ class _HomePageState extends State<HomePage> {
   Widget _buildAppDrawer(BuildContext context) {
     final theme = Theme.of(context);
     final user = FirebaseAuth.instance.currentUser;
-    final userName = user?.displayName ?? 'Sunie Pham';
+    final userName = user?.displayName ?? 'Sunie Khaled';
     final userEmail = user?.email ?? 'sunieux@gmail.com';
 
     return Drawer(

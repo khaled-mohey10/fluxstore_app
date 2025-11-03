@@ -95,104 +95,108 @@ class ProductCard extends StatelessWidget {
   }
 
   Widget _buildHorizontalCard() {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(12),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.05),
-              blurRadius: 6,
-              offset: const Offset(0, 4),
-            ),
-          ],
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ClipRRect(
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(12),
-                topRight: Radius.circular(12),
+    return Container(
+      width: 160, // --- (هذا هو الإصلاح) ---
+      margin: const EdgeInsets.only(right: 16), // لإضافة مسافة بين البطاقات
+      child: GestureDetector(
+        onTap: onTap,
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(12),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.05),
+                blurRadius: 6,
+                offset: const Offset(0, 4),
               ),
-              child: Image.asset(
-                imageUrl,
-                fit: BoxFit.cover,
-                height: 180, 
-                width: double.infinity,
+            ],
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ClipRRect(
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(12),
+                  topRight: Radius.circular(12),
+                ),
+                child: Image.asset(
+                  imageUrl,
+                  fit: BoxFit.cover,
+                  height: 180, 
+                  width: double.infinity,
+                ),
               ),
-            ),
-            
-            Padding(
-              padding: const EdgeInsets.all(12),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    name,
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                    ),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  const SizedBox(height: 6),
-                  
-                  Row(
-                    children: [
-                      Text(
-                        price,
-                        style: TextStyle(
-                          color: AppColors.primary,
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
+              
+              Padding(
+                padding: const EdgeInsets.all(12),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      name,
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
                       ),
-                      if (oldPrice != null) ...[
-                        const SizedBox(width: 8),
-                        Text(
-                          oldPrice!,
-                          style: TextStyle(
-                            color: Colors.grey[500],
-                            fontSize: 14,
-                            decoration: TextDecoration.lineThrough,
-                          ),
-                        ),
-                      ],
-                    ],
-                  ),
- 
-                  if (rating != null && reviewCount != null) ...[
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                     const SizedBox(height: 6),
+                    
                     Row(
                       children: [
-                        ...List.generate(
-                          5,
-                          (index) => Icon(
-                            Icons.star,
-                            size: 16,
-                            color: index < rating! ? Colors.amber : Colors.grey[300],
-                          ),
-                        ),
-                        const SizedBox(width: 4),
                         Text(
-                          '($reviewCount)',
-                          style: const TextStyle(
-                            color: Colors.grey,
-                            fontSize: 12,
+                          price,
+                          style: TextStyle(
+                            color: AppColors.primary,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
+                        if (oldPrice != null) ...[
+                          const SizedBox(width: 8),
+                          Text(
+                            oldPrice!,
+                            style: TextStyle(
+                              color: Colors.grey[500],
+                              fontSize: 14,
+                              decoration: TextDecoration.lineThrough,
+                            ),
+                          ),
+                        ],
                       ],
                     ),
-                  ],
-                 ],
+   
+                    if (rating != null && reviewCount != null) ...[
+                      const SizedBox(height: 6),
+                      Row(
+                        children: [
+                          ...List.generate(
+                            5,
+                            (index) => Icon(
+                              Icons.star,
+                              size: 16,
+                              color: index < rating! ? Colors.amber : Colors.grey[300],
+                            ),
+                          ),
+                          const SizedBox(width: 4),
+                          Text(
+                            '($reviewCount)',
+                            style: const TextStyle(
+                              color: Colors.grey,
+                              fontSize: 12,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                   ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

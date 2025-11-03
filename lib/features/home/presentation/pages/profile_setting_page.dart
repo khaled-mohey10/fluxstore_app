@@ -33,8 +33,8 @@ class _ProfileSettingPageState extends State<ProfileSettingPage> {
       _lastNameController.text =
           nameParts.length > 1 ? nameParts.sublist(1).join(' ') : '';
       
-      _genderController.text = 'Female'; 
-      _phoneController.text = '(+1) 23456789';
+      _genderController.text = 'male'; 
+      _phoneController.text = '(+20) 1117891398';
     }
   }
 

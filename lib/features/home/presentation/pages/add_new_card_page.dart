@@ -10,7 +10,7 @@ class AddNewCardPage extends StatefulWidget {
 }
 
 class _AddNewCardPageState extends State<AddNewCardPage> {
-  final _nameController = TextEditingController(text: 'Sunie Pham');
+  final _nameController = TextEditingController(text: 'Sunie Khaled');
   final _numberController = TextEditingController(text: '5412363272837284');
   final _expiresController = TextEditingController(text: '03/23');
   final _cvvController = TextEditingController(text: '999');
