@@ -15,7 +15,9 @@ class AppTextField extends StatelessWidget {
   final int? minLines;
   final bool enabled;
   final TextStyle? style;
-  final String? initialValue; 
+  final String? initialValue;
+  final int? maxLength; 
+  final InputDecoration? decoration; 
 
   const AppTextField({
     super.key,
@@ -32,8 +34,10 @@ class AppTextField extends StatelessWidget {
     this.minLines,
     this.enabled = true,
     this.style,
-    this.initialValue, 
-  }) : assert( 
+    this.initialValue,
+    this.maxLength, 
+    this.decoration, 
+  }) : assert(
           controller == null || initialValue == null,
           'لا يمكن استخدام controller و initialValue في نفس الوقت.',
         );
@@ -42,9 +46,25 @@ class AppTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
+
+    final baseDecoration = decoration ?? const InputDecoration();
+
+
+    final effectiveDecoration = baseDecoration.copyWith(
+      hintText: hintText,
+      labelText: labelText,
+      prefixIcon: prefixIcon,
+      suffixIcon: suffixIcon,
+      contentPadding: baseDecoration.contentPadding ?? 
+          const EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: 16,
+          ),
+    );
+
     return TextFormField(
       controller: controller,
-      initialValue: initialValue, 
+      initialValue: initialValue,
       obscureText: obscureText,
       keyboardType: keyboardType,
       validator: validator,
@@ -52,19 +72,10 @@ class AppTextField extends StatelessWidget {
       maxLines: maxLines,
       minLines: minLines,
       enabled: enabled,
-      style: style ?? theme.textTheme.bodyLarge?.copyWith(color: AppColors.text), 
-      decoration: InputDecoration(
-        hintText: hintText,
-        labelText: labelText,
-        prefixIcon: prefixIcon,
-        suffixIcon: suffixIcon,
-
-        
-        contentPadding: const EdgeInsets.symmetric(
-          horizontal: 16,
-          vertical: 16,
-        ),
-      ),
+      style:
+          style ?? theme.textTheme.bodyLarge?.copyWith(color: AppColors.text),
+      maxLength: maxLength, 
+      decoration: effectiveDecoration,
     );
   }
 }

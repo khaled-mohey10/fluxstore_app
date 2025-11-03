@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:glamour_app/core/widgets/app_button.dart'; // هنحتاجه للأزرار
+import 'package:glamour_app/core/widgets/app_button.dart'; 
 
 class OrderInfoPage extends StatefulWidget {
   const OrderInfoPage({super.key});
@@ -9,7 +9,6 @@ class OrderInfoPage extends StatefulWidget {
 }
 
 class _OrderInfoPageState extends State<OrderInfoPage> {
-  // متغيرات عشان نخزن فيها البيانات اللي هتجيلنا
   late String orderNumber;
   late String status;
   late Map<String, dynamic> orderData;
@@ -18,7 +17,6 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    // استقبال البيانات المرسلة من صفحة "My Orders"
     final arguments =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>?;
     if (arguments != null) {
@@ -39,9 +37,7 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
     final theme = Theme.of(context);
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Order #$orderNumber'),
-      ),
+      appBar: AppBar(title: Text('Order #$orderNumber')),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -68,10 +64,8 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
     );
   }
 
-  // --- Widgets ---
 
   Widget _buildStatusBanner(ThemeData theme) {
-    // بناءً على الصور (order info-1.png, order info-2.png)
     String title;
     String subtitle;
     IconData icon;
@@ -79,7 +73,7 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
     if (isDelivered) {
       title = 'Your order is delivered';
       subtitle = 'Rate product to get 5 points for collect.';
-      icon = Icons.delivery_dining; // أو أي أيقونة مناسبة
+      icon = Icons.delivery_dining; 
     } else {
       title = 'Your order is on the way';
       subtitle = 'Click here to track your order';
@@ -89,9 +83,9 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
     return GestureDetector(
       onTap: () {
         if (!isDelivered) {
-          print('Navigate to Track Order');
+          Navigator.pushNamed(context, '/track-order'); 
         } else {
-          print('Navigate to Rate Product');
+          Navigator.pushNamed(context, '/rate-product'); 
         }
       },
       child: Container(
@@ -106,13 +100,19 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(title,
-                    style: theme.textTheme.titleMedium
-                        ?.copyWith(color: Colors.white)),
+                Text(
+                  title,
+                  style: theme.textTheme.titleMedium?.copyWith(
+                    color: Colors.white,
+                  ),
+                ),
                 const SizedBox(height: 4),
-                Text(subtitle,
-                    style: theme.textTheme.bodyMedium
-                        ?.copyWith(color: Colors.white70)),
+                Text(
+                  subtitle,
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: Colors.white70,
+                  ),
+                ),
               ],
             ),
             Icon(icon, color: Colors.white, size: 40),
@@ -133,13 +133,22 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
       child: Column(
         children: [
           _buildDetailRow(
-              'Order number', '#${orderData['number'] ?? 'N/A'}', theme),
+            'Order number',
+            '#${orderData['number'] ?? 'N/A'}',
+            theme,
+          ),
           const Divider(height: 24),
           _buildDetailRow(
-              'Tracking Number', orderData['tracking'] ?? 'N/A', theme),
+            'Tracking Number',
+            orderData['tracking'] ?? 'N/A',
+            theme,
+          ),
           const Divider(height: 24),
           _buildDetailRow(
-              'Delivery address', 'SBI Building, Software Park', theme), // بيانات ثابتة مؤقتاً
+            'Delivery address',
+            'SBI Building, Software Park',
+            theme,
+          ), 
         ],
       ),
     );
@@ -150,9 +159,12 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(title, style: theme.textTheme.bodyMedium),
-        Text(value,
-            style: theme.textTheme.bodyLarge
-                ?.copyWith(fontWeight: FontWeight.w600)),
+        Text(
+          value,
+          style: theme.textTheme.bodyLarge?.copyWith(
+            fontWeight: FontWeight.w600,
+          ),
+        ),
       ],
     );
   }
@@ -182,8 +194,9 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
               ),
               Text(
                 '\$${(product['price'] as double).toStringAsFixed(2)}',
-                style: theme.textTheme.titleMedium
-                    ?.copyWith(fontWeight: FontWeight.bold),
+                style: theme.textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ],
           ),
@@ -194,25 +207,25 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
 
   Widget _buildOrderSummarySection(ThemeData theme) {
     final subtotal = orderData['subtotal'] ?? 0.0;
-    const shipping = 0.00; // من التصميم
+    const shipping = 0.00; 
 
     return Column(
       children: [
-        _buildDetailRow(
-            'Sub Total', '\$${subtotal.toStringAsFixed(2)}', theme),
+        _buildDetailRow('Sub Total', '\$${subtotal.toStringAsFixed(2)}', theme),
         const SizedBox(height: 12),
-        _buildDetailRow(
-            'Shipping', '\$${shipping.toStringAsFixed(2)}', theme),
+        _buildDetailRow('Shipping', '\$${shipping.toStringAsFixed(2)}', theme),
         const Divider(height: 24),
         _buildDetailRow(
-            'Total', '\$${(subtotal + shipping).toStringAsFixed(2)}', theme),
+          'Total',
+          '\$${(subtotal + shipping).toStringAsFixed(2)}',
+          theme,
+        ),
       ],
     );
   }
 
   Widget _buildBottomButtons() {
     if (isDelivered) {
-      // زي صورة order info-1.png
       return Padding(
         padding: const EdgeInsets.all(16.0),
         child: Row(
@@ -222,11 +235,14 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
                 text: 'Return home',
                 onPressed: () {
                   Navigator.pushNamedAndRemoveUntil(
-                      context, '/home', (route) => false);
+                    context,
+                    '/home',
+                    (route) => false,
+                  );
                 },
                 isOutlined: true,
                 textColor: Colors.black,
-                backgroundColor: Colors.black, // for outline border
+                backgroundColor: Colors.black, 
               ),
             ),
             const SizedBox(width: 16),
@@ -234,7 +250,7 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
               child: AppButton(
                 text: 'Rate',
                 onPressed: () {
-                  print('Navigate to Rate Product');
+                  Navigator.pushNamed(context, '/rate-product'); 
                 },
                 backgroundColor: Colors.black,
                 textColor: Colors.white,
@@ -244,14 +260,16 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
         ),
       );
     } else {
-      // زي صورة order info-2.png
       return Padding(
         padding: const EdgeInsets.all(16.0),
         child: AppButton(
           text: 'Continue shopping',
           onPressed: () {
             Navigator.pushNamedAndRemoveUntil(
-                context, '/home', (route) => false);
+              context,
+              '/home',
+              (route) => false,
+            );
           },
           backgroundColor: Colors.black,
           textColor: Colors.white,
