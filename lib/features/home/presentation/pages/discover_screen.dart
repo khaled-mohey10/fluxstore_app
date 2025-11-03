@@ -71,11 +71,13 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
         actions: [
           IconButton(
             icon: const Icon(Icons.notifications_none),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pushNamed(context, '/notifications');
+            },
           ),
         ],
       ),
-      body: Column(
+      body: Column( 
         children: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),

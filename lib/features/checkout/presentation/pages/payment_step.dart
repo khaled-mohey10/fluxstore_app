@@ -65,6 +65,23 @@ class _PaymentStepState extends State<PaymentStep> {
                 const SizedBox(height: 32),
                 
                 _buildCreditCard(),
+                
+                const SizedBox(height: 24), 
+                Center(
+                  child: Text(
+                    'or check out with',
+                    style: theme.textTheme.bodyMedium
+                        ?.copyWith(color: Colors.grey[600]),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                Center(
+                  child: Image.asset(
+                    'assets/images/payments.png',
+                    height: 40, 
+                  ),
+                ),
+
                 const SizedBox(height: 32),
                 
                 _buildSummaryRow('Product price', '\$110', theme),

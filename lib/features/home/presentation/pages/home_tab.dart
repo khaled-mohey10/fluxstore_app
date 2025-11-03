@@ -12,7 +12,7 @@ class HomeTab extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: const Icon(Icons.menu), 
+          icon: const Icon(Icons.menu),
           onPressed: () {
             Scaffold.of(context).openDrawer();
           },
@@ -21,8 +21,9 @@ class HomeTab extends StatelessWidget {
         centerTitle: true,
         actions: [
           IconButton(
-            icon: const Icon(Icons.notifications_outlined), 
+            icon: const Icon(Icons.notifications_outlined),
             onPressed: () {
+              Navigator.pushNamed(context, '/notifications');
             },
           ),
         ],
@@ -69,7 +70,6 @@ class HomeTab extends StatelessWidget {
     );
   }
 
-
   Widget _buildNewCollectionSection() {
     return Padding(
       padding: const EdgeInsets.all(16),
@@ -100,7 +100,7 @@ class HomeTab extends StatelessWidget {
 
   Widget _buildTopCollectionSection(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return Padding(
       padding: const EdgeInsets.all(16),
       child: Column(
@@ -109,10 +109,7 @@ class HomeTab extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                'Top Collection',
-                style: theme.textTheme.titleLarge, 
-              ),
+              Text('Top Collection', style: theme.textTheme.titleLarge),
               TextButton(
                 onPressed: () {},
                 child: Text(

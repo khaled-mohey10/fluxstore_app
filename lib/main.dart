@@ -2,15 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:glamour_app/core/constants/app_colors.dart';
 import 'package:glamour_app/data/services/firebase_auth_service.dart';
+import 'package:glamour_app/features/address/presentation/pages/address_page.dart';
 import 'package:glamour_app/features/auth/presentation/pages/forgot_password_page.dart';
 import 'package:glamour_app/features/auth/presentation/pages/login_page.dart';
 import 'package:glamour_app/features/auth/presentation/pages/signup_page.dart';
+import 'package:glamour_app/features/home/presentation/pages/add_new_card_page.dart';
 import 'package:glamour_app/features/home/presentation/pages/home_page.dart';
+import 'package:glamour_app/features/home/presentation/pages/payment_method_page.dart';
+import 'package:glamour_app/features/home/presentation/pages/profile_setting_page.dart';
+import 'package:glamour_app/features/notification/presentation/pages/notification_page.dart';
 import 'package:glamour_app/features/orders/presentation/pages/my_orders_page.dart';
 import 'package:glamour_app/features/orders/presentation/pages/order_info_page.dart';
 import 'package:glamour_app/features/orders/presentation/pages/track_order_page.dart';
 import 'package:glamour_app/features/product/presentation/pages/rate_product_page.dart';
 import 'package:glamour_app/features/search/presentation/pages/search_screen.dart';
+import 'package:glamour_app/features/setting/presentation/pages/chat_support_page.dart';
+import 'package:glamour_app/features/setting/presentation/pages/notification_setting_page.dart';
+import 'package:glamour_app/features/setting/presentation/pages/setting_page.dart';
+import 'package:glamour_app/features/voucher/presentation/pages/voucher_page.dart';
+import 'package:glamour_app/features/wishlist/presentation/pages/wishlist_page.dart';
 import 'package:glamour_app/screens/welcome_screen.dart';
 import 'package:glamour_app/screens/onboarding_screen.dart';
 
@@ -131,6 +141,16 @@ class GlamourApp extends StatelessWidget {
         '/order-info': (context) => const OrderInfoPage(),
         '/track-order': (context) => const TrackOrderPage(),
         '/rate-product': (context) => const RateProductPage(),
+        '/notifications': (context) => const NotificationPage(), 
+         '/profile-settings': (context) => const ProfileSettingPage(),
+         '/payment-method': (context) => const PaymentMethodPage(),
+         '/wishlist': (context) => const WishlistPage(),
+         '/settings': (context) => const SettingPage(),
+         '/notification-settings': (context) => const NotificationSettingPage(),
+         '/chat-support': (context) => const ChatSupportPage(),
+         '/address': (context) => const AddressPage(),
+         '/vouchers': (context) => const VoucherPage(),
+         '/add-new-card': (context) => const AddNewCardPage(),
 
       },
     );
